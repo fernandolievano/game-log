@@ -27,10 +27,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
   name: String;
-  required: {
-    type: Boolean,
-    required: true,
-  };
+  required: Boolean,
 }>();
 const hasErrors = ref<Boolean>(false);
 </script>
