@@ -1,6 +1,6 @@
 <template>
   <button
-    class="w-full max-w-[220px] py-2 px-4  flex items-center justify-start gap-2 border rounded cursor-pointer transition-all text-black bg-white hover:bg-black hover:text-white hover:border-transparent dark:text-white dark:bg-black dark:hover:bg-white dark:hover:text-black hover:scale-110">
+    class="w-full max-w-[220px] py-2 px-4  flex items-center justify-start gap-2 border rounded cursor-pointer transition-all text-black bg-white hover:bg-black hover:text-white hover:border-transparent dark:text-white dark:bg-black dark:hover:bg-white dark:hover:text-black duration-500">
     <span class="w-6">
       <component :is="selectedComponent" v-if="selectedComponent"></component>
     </span>
