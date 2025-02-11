@@ -13,7 +13,7 @@ import IconGitHub from '@/components/svg/IconGitHub.vue';
 import IconGoogle from '@/components/svg/IconGoogle.vue';
 
 const props = defineProps<{
-  provider: 'github | google';
+  provider: 'github' | 'google';
 }>();
 
 const providerName = computed(() => ({
