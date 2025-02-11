@@ -13,6 +13,6 @@
 
 <script setup>
 useHead({
-  title: 'GamingLog'
+  title: 'GameLog'
 });
 </script>
