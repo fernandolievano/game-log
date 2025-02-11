@@ -1,13 +1,16 @@
 <template>
-  <main>
-    <section class="px-4 py-2">
-      <h1 class="text-center text-2xl text-gray-three">Log In</h1>
-    </section>
-  </main>
+  <section class="p-4 flex items-center justify-center">
+    <LoginForm />
+  </section>
 </template>
 
 <script lang="ts" setup>
+import LoginForm from '@/components/auth/LoginForm.vue';
+
 definePageMeta({
   layout: 'auth',
+});
+useHead({
+  title: 'Log In - GameLog'
 });
 </script>
