@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-  required: Boolean,
+  required: boolean,
 }>();
 const hasErrors = ref<Boolean>(false);
 </script>
