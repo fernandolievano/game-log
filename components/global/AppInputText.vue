@@ -1,26 +1,15 @@
 <template>
-  <div
-    class="py-4 w-full text-left flex flex-col gap-2 transition-colors"
-    :class="[hasErrors ? 'text-red-800 dark:text-red-400' : 'text-current']"
-  >
-    <label
-      :for="name"
-      class="capitalize font-bold text-left w-full text-sm"
-    >
+  <div class="py-4 w-full text-left flex flex-col gap-2 transition-colors"
+    :class="[hasErrors ? 'text-red-800 dark:text-red-400' : 'text-current']">
+    <label :for="name" class="capitalize font-bold text-left w-full text-sm">
       {{ name }} <span v-if="required">*</span>
     </label>
-    <input
-      type="text"
-      :id="name"
-      :name="name"
-      class="w-full border rounded-lg py-2 px-4"
-      :class="[hasErrors ? 'border-red-800 dark:border-red-400' : 'border-current']"
-      :placeholder="`Enter your ${name}`"
-      :required="required"
-      >
+    <input v-model="model" type="text" :id="name" :name="name" class="w-full border rounded-lg py-2 px-4"
+      :class="[hasErrors ? 'border-red-800 dark:border-red-400' : 'border-current']" :placeholder="`Enter your ${name}`"
+      required>
   </div>
-  <p class="text-xs italic text-left px-2 text-red-800 dark:text-red-400 h-4 -mt-2">
-    <span v-show="hasErrors">Este campo es requerido para continuar</span>
+  <p class="text-xs italic text-left px-1 text-red-800 dark:text-red-400 h-4 -mt-1">
+    <span v-show="hasErrors">{{ displayError }}</span>
   </p>
 </template>
 
@@ -28,6 +17,9 @@
 const props = defineProps<{
   name: string;
   required: boolean;
+  errors?: Array<string>;
 }>();
-const hasErrors = ref<boolean>(false);
+const hasErrors = computed(() => (props.errors != null && props.errors.length >= 1));
+const displayError = computed(() => (props.errors != null ? props.errors[0] : ''));
+const model = defineModel<string>();
 </script>

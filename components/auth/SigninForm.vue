@@ -11,15 +11,58 @@
       </h3>
     </div>
 
-    <form class="w-full px-2 py-0">
-      <AppInputText name="username" :required="true" />
-      <AppInputEmail :required="true" />
-      <AppInputPassword :required="true" />
+    <form @submit.prevent="handleForm" class="w-full px-2 py-0">
+      <AppInputText v-model="form.username" name="username" :errors="errors.username" :required="true" />
+      <AppInputEmail v-model="form.email" :errors="errors.email" :required="true" />
+      <AppInputPassword v-model="form.password" :errors="errors.password" :required="true" />
       <AppButton>Submit</AppButton>
     </form>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { z, ZodError } from 'zod';
 import OAuthButton from '@/components/auth/OAuthButton.vue';
+
+
+const formSchema = z.object({
+  username: z.string().min(3, 'Username should be at least 3 characters.'),
+  email: z.string().email(),
+  password: z.string().min(5, 'Password should be at least 5 characters.')
+});
+type FormType = z.infer<typeof formSchema>;
+const form = ref<FormType>({
+  username: '',
+  email: '',
+  password: ''
+});
+const errors = ref<Partial<Record<keyof FormType, string[]>>>({});
+
+const validate = () => {
+  try {
+    const result = formSchema.parse(form.value);
+    errors.value = {};
+  } catch (err) {
+    if (err instanceof ZodError) {
+      errors.value = err.formErrors.fieldErrors;
+      console.log('Errores', errors.value);
+    }
+  }
+};
+
+const handleForm = () => {
+  validate();
+
+  if (Object.keys(errors.value).length === 0) {
+    console.log('submitted form!', form.value);
+    form.value = {
+      username: '',
+      email: '',
+      password: ''
+    };
+  } else {
+    console.log('form not submitted');
+  }
+}
+
 </script>

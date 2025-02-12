@@ -5,7 +5,8 @@
       Password <span v-if="required">*</span>
     </label>
     <div class="relative w-full h-fit">
-      <input :type="isVisible ? 'text' : 'password'" id="password" name="password" class="w-full border rounded-lg py-2 px-4"
+      <input v-model="model" :type="isVisible ? 'text' : 'password'" id="password" name="password"
+        class="w-full border rounded-lg py-2 px-4"
         :class="[hasErrors ? 'border-red-800 dark:border-red-400' : 'border-current']"
         placeholder="Create your password" required>
       <button class="absolute right-0 top-0 h-full py-2 px-4 rounded-r-lg border cursor-pointer transition-colors"
@@ -15,8 +16,8 @@
         <EyeClosed v-else></EyeClosed>
       </button>
     </div>
-    <p class="text-xs italic text-left px-2 text-red-800 dark:text-red-400 h-4 -mt-2">
-      <span v-show="hasErrors">Este campo es requerido para continuar</span>
+    <p class="text-xs italic text-left px-1 text-red-800 dark:text-red-400 h-4 -mt-1">
+      <span v-if="hasErrors">{{ displayError }}</span>
     </p>
   </div>
 </template>
@@ -24,8 +25,11 @@
 <script lang="ts" setup>
 import { Eye, EyeClosed } from 'lucide-vue-next';
 const props = defineProps<{
-  required: Boolean,
+  required: Boolean;
+  errors?: Array<string>;
 }>();
-const hasErrors = ref<Boolean>(false);
-const isVisible = ref<Boolean>(false);
+const hasErrors = computed(() => (props.errors != null && props.errors.length >= 1));
+const displayError = computed(() => (props.errors != null ? props.errors[0] : ''));
+const model = defineModel<string>();
+const isVisible = ref<boolean>(false);
 </script>
