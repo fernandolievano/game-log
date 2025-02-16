@@ -12,10 +12,17 @@
     </div>
 
     <form @submit.prevent="handleForm" class="w-full px-2 py-0">
-      <AppInputText v-model="form.username" name="username" :errors="errors.username" :required="true" />
       <AppInputEmail v-model="form.email" :errors="errors.email" :required="true" />
       <AppInputPassword v-model="form.password" :errors="errors.password" :required="true" />
-      <AppButton>Submit</AppButton>
+      <AppButton :disabled="isLoading">
+        {{ isLoading ? 'Sending...' : 'Submit' }}
+      </AppButton>
+
+      <div v-if="errorMessage" class="py-8 px-0 w-full">
+        <div class="rounded-lg border-2 border-pink-900 bg-pink-700 text-white px-6 py-4">
+          <p class="font-bold">{{ errorMessage }}</p>
+        </div>
+      </div>
     </form>
   </div>
 </template>
@@ -23,16 +30,19 @@
 <script lang="ts" setup>
 import { z, ZodError } from 'zod';
 import OAuthButton from '@/components/auth/OAuthButton.vue';
+import { useAuth } from '@/composables/useAuth';
 
-
+const {
+  isLoading,
+  registerUser,
+  errorMessage
+} = useAuth();
 const formSchema = z.object({
-  username: z.string().min(3, 'Username should be at least 3 characters.'),
   email: z.string().email(),
-  password: z.string().min(5, 'Password should be at least 5 characters.')
+  password: z.string().min(6, 'Password should be at least 6 characters.')
 });
 type FormType = z.infer<typeof formSchema>;
 const form = ref<FormType>({
-  username: '',
   email: '',
   password: ''
 });
@@ -40,7 +50,7 @@ const errors = ref<Partial<Record<keyof FormType, string[]>>>({});
 
 const validate = () => {
   try {
-    const result = formSchema.parse(form.value);
+    formSchema.parse(form.value);
     errors.value = {};
   } catch (err) {
     if (err instanceof ZodError) {
@@ -50,16 +60,22 @@ const validate = () => {
   }
 };
 
-const handleForm = () => {
+const handleForm = async () => {
   validate();
 
   if (Object.keys(errors.value).length === 0) {
-    console.log('submitted form!', form.value);
-    form.value = {
-      username: '',
-      email: '',
-      password: ''
-    };
+    try {
+      console.log('submitted form!', form.value);
+
+      await registerUser(form.value.email, form.value.password);
+
+      form.value = {
+        email: '',
+        password: ''
+      };
+    } catch (error) {
+      alert(error);
+    }
   } else {
     console.log('form not submitted');
   }
