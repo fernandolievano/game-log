@@ -32,9 +32,35 @@ export const useAuth = () => {
       isLoading.value = false;
     }
   };
+  const loginUser = async (email: string, password: string) => {
+    isLoading.value = true;
+    errorMessage.value = null;
+
+    try {
+      const { error, data }: AuthResponse = await $supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) return (errorMessage.value = error.message);
+
+      console.log('Logged in as:', data); // ! remove later
+      await router.push({ path: '/' });
+    } catch (err: unknown) {
+      console.error('Unexpected error during registration:', err);
+      if (err instanceof Error) {
+        errorMessage.value = err.message;
+      } else {
+        errorMessage.value = 'An unexpected error ocurred.';
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  };
 
   return {
     registerUser,
+    loginUser,
     errorMessage,
     isLoading,
   };

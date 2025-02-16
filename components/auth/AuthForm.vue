@@ -45,6 +45,7 @@ const props = defineProps<{
 const {
   isLoading,
   registerUser,
+  loginUser,
   errorMessage
 } = useAuth();
 const {
@@ -55,8 +56,10 @@ const {
 
 const handleForm = async () => {
   try {
+    const sendForm = props.shouldRegister ? registerUser : loginUser
+
     await validateForm();
-    await registerUser(formData.value.email, formData.value.password);
+    await sendForm(formData.value.email, formData.value.password);
 
     formData.value = {
       email: '',
