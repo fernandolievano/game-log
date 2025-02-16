@@ -4,7 +4,7 @@
     <span class="w-6">
       <component :is="selectedComponent" v-if="selectedComponent"></component>
     </span>
-    Sign up with {{ providerName }}
+    {{ buttonCaption }} {{ providerName }}
   </button>
 </template>
 
@@ -14,12 +14,16 @@ import IconGoogle from '@/components/svg/IconGoogle.vue';
 
 const props = defineProps<{
   provider: 'github' | 'google';
+  shouldRegister: boolean;
 }>();
 
 const providerName = computed(() => ({
   google: 'Google',
   github: 'GitHub',
 }[props.provider] || 'Undefined'));
+const buttonCaption = computed (() => (
+  props.shouldRegister ? `Sign up with` : `Sign in with`
+))
 
 const componentsMap = {
   github: IconGitHub,

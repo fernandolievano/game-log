@@ -1,10 +1,10 @@
 <template>
   <div class="w-full max-w-[500px] mx-auto px-4 py-8 flex flex-col gap-8">
-    <h1 class="text-6xl text-center px-2">Create account</h1>
+    <h1 class="text-6xl text-center px-2">{{ title }}</h1>
 
     <div class="flex flex-col gap-4 items-center justify-center px-2">
-      <OAuthButton provider="google" />
-      <OAuthButton provider="github" />
+      <OAuthButton provider="google" :should-register="shouldRegister" />
+      <OAuthButton provider="github" :should-register="shouldRegister" />
     </div>
 
     <h3 class="w-full text-2xl text-center text-gray-two flex gap-8 items-center justify-center px-2">
@@ -33,25 +33,34 @@
 </template>
 
 <script lang="ts" setup>
-import { z, ZodError } from 'zod';
 import OAuthButton from '@/components/auth/OAuthButton.vue';
-import { useAuth } from '@/composables/useAuth';
 import { CircleX } from 'lucide-vue-next';
+import { z, ZodError } from 'zod';
+import { useAuth } from '@/composables/useAuth';
+
+const props = defineProps<{
+  title: string;
+  shouldRegister: boolean;
+}>();
 
 const {
   isLoading,
   registerUser,
   errorMessage
 } = useAuth();
+
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6, 'Password should be at least 6 characters.')
 });
+
 type FormType = z.infer<typeof formSchema>;
+
 const form = ref<FormType>({
   email: '',
   password: ''
 });
+
 const errors = ref<Partial<Record<keyof FormType, string[]>>>({});
 
 const validate = () => {
