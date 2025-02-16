@@ -1,5 +1,5 @@
 <template>
-  <section class="p-4">
+  <section class="p-4 lg:p-8">
     <SigninForm />
   </section>
 </template>
