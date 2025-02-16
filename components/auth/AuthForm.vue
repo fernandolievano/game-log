@@ -14,8 +14,8 @@
     </h3>
 
     <form @submit.prevent="handleForm" class="w-full flex flex-col gap-4 px-2">
-      <AppInputEmail v-model="form.email" :errors="errors.email" :required="true" />
-      <AppInputPassword v-model="form.password" :errors="errors.password" :required="true" />
+      <AppInputEmail v-model="formData.email" :errors="formErrors.email" :required="true" />
+      <AppInputPassword v-model="formData.password" :errors="formErrors.password" :required="true" />
       <AppButton :disabled="isLoading">
         {{ isLoading ? 'Sending...' : 'Submit' }}
       </AppButton>
@@ -35,64 +35,35 @@
 <script lang="ts" setup>
 import OAuthButton from '@/components/auth/OAuthButton.vue';
 import { CircleX } from 'lucide-vue-next';
-import { z, ZodError } from 'zod';
 import { useAuth } from '@/composables/useAuth';
+import { useAuthForm } from '@/composables/useAuthForm';
 
 const props = defineProps<{
   title: string;
   shouldRegister: boolean;
 }>();
-
 const {
   isLoading,
   registerUser,
   errorMessage
 } = useAuth();
-
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6, 'Password should be at least 6 characters.')
-});
-
-type FormType = z.infer<typeof formSchema>;
-
-const form = ref<FormType>({
-  email: '',
-  password: ''
-});
-
-const errors = ref<Partial<Record<keyof FormType, string[]>>>({});
-
-const validate = () => {
-  try {
-    formSchema.parse(form.value);
-    errors.value = {};
-  } catch (err) {
-    if (err instanceof ZodError) {
-      errors.value = err.formErrors.fieldErrors;
-      console.log('Errores', errors.value);
-    }
-  }
-};
+const {
+  formData,
+  formErrors,
+  validateForm
+} = useAuthForm();
 
 const handleForm = async () => {
-  validate();
+  try {
+    await validateForm();
+    await registerUser(formData.value.email, formData.value.password);
 
-  if (Object.keys(errors.value).length === 0) {
-    try {
-      console.log('submitted form!', form.value);
-
-      await registerUser(form.value.email, form.value.password);
-
-      form.value = {
-        email: '',
-        password: ''
-      };
-    } catch (error) {
-      alert(error);
-    }
-  } else {
-    console.log('form not submitted');
+    formData.value = {
+      email: '',
+      password: ''
+    };
+  } catch (err: unknown) {
+    console.error(err);
   }
 }
 
