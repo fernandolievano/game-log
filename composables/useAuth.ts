@@ -63,5 +63,6 @@ export const useAuth = () => {
     loginUser,
     errorMessage,
     isLoading,
+    $supabase
   };
 };
