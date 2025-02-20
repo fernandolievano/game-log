@@ -5,7 +5,7 @@
         <NuxtLoadingIndicator />
         <div class="flex min-h-screen h-fit items-stretch justify-between p-8 gap-4 xl:gap-8">
           <div class="w-full h-fit lg:max-w-[600px] xl:max-w-[800px] my-auto">
-            <slot />
+            <NuxtPage />
           </div>
 
           <div
@@ -17,7 +17,7 @@
     </template>
     <template #fallback>
       <main class="loading-screen">
-        Loading... {{ userStore.loading }}
+        Loading...
       </main>
     </template>
   </Suspense>
@@ -27,11 +27,11 @@
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
-// Check auth status once on initial load
+
 onBeforeMount(async () => {
-  if (!userStore.user) {
-    userStore.loading = true;
-    await userStore.fetchUser();
-  }
+  // if (userStore.user != null) {
+  //   navigateTo('/');
+  // }
+  userStore.fetchUser();
 });
 </script>

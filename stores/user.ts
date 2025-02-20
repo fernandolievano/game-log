@@ -12,20 +12,33 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     async fetchUser() {
-      const { $supabase } = useAuth();
-      const { data } = await $supabase.auth.getUser();
-      console.log('user from store: ', data);
-      if (data != null) {
-        this.user = data.user;
-        this.persistUser();
+      const savedUser = cookies.get('user');
+
+      if (savedUser) {
+        this.user = savedUser;
+        this.loading = false;
+      } else {
+        const { $supabase } = useAuth();
+        const { data } = await $supabase.auth.getUser();
+
+        if (data.user) {
+          this.user = data.user;
+          this.persistUser();
+        }
+
+        this.loading = false;
       }
-      this.loading = false;
     },
     persistUser() {
       if (this.user != null) {
-        cookies.set('user', this.user);
+        cookies.set('user', this.user, {
+          path: '/',
+          maxAge: 60 * 60 * 24,
+          sameSite: 'strict',
+          secure: false, // has to be true in production
+        });
       } else {
-        cookies.remove('user');
+        cookies.remove('user', { path: '/' });
       }
     },
     loadUserFromStorage() {

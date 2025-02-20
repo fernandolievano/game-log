@@ -8,7 +8,7 @@
         <!-- aside -->
         <!-- aside -->
         <!-- content -->
-        <slot />
+        <NuxtPage />
         <!-- content -->
 
         <div class="py-8 text-center">
@@ -32,14 +32,11 @@ import { useUserStore } from '@/stores/user';
 useHead({
   title: 'GameLog'
 });
-
 const userStore = useUserStore();
-
-// Check auth status once on initial load
 onBeforeMount(async () => {
-  if (!userStore.user) {
-    userStore.loading = true
-    await userStore.fetchUser()
-  }
-})
+  // if (userStore.user != null) {
+  //   navigateTo('/');
+  // }
+  userStore.fetchUser();
+});
 </script>

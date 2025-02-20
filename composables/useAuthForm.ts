@@ -22,7 +22,7 @@ export const useAuthForm = () => {
     } catch (err: unknown) {
       if (err instanceof ZodError) {
         formErrors.value = err.formErrors.fieldErrors;
-        console.log('Errores', formErrors.value);
+        console.error('Errores', formErrors.value);
       }
       throw err;
     }

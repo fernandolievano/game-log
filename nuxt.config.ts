@@ -6,9 +6,6 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   devtools: { enabled: true },
   modules: ['@pinia/nuxt'],
-  routeRules: {
-    '/': { redirect: '/dashboard' }
-  },
   runtimeConfig: {
     public: {
       supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,

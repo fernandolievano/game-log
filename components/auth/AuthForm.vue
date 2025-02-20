@@ -3,8 +3,16 @@
     <h1 class="text-6xl text-center px-2">{{ title }}</h1>
 
     <div class="flex flex-col gap-4 items-center justify-center px-2">
-      <OAuthButton provider="google" :should-register="shouldRegister" />
-      <OAuthButton provider="github" :should-register="shouldRegister" />
+      <OAuthButton
+        provider="google"
+        :should-register="shouldRegister"
+        @click="loginUserOAuth('google')"
+      />
+      <OAuthButton
+        provider="github"
+        :should-register="shouldRegister"
+        @click="loginUserOAuth('github')"
+      />
     </div>
 
     <h3 class="w-full text-2xl text-center text-gray-two flex gap-8 items-center justify-center px-2">
@@ -46,6 +54,7 @@ const {
   isLoading,
   registerUser,
   loginUser,
+  loginUserOAuth,
   errorMessage
 } = useAuth();
 const {
