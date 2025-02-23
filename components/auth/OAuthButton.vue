@@ -1,10 +1,10 @@
 <template>
   <button
-    class="w-full max-w-[220px] py-2 px-4  flex items-center justify-start gap-2 border rounded cursor-pointer transition-all text-black bg-white hover:bg-black hover:text-white hover:border-transparent dark:text-white dark:bg-black dark:hover:bg-white dark:hover:text-black duration-500">
+    class="w-full max-w-[500px] py-3 px-5 flex items-center justify-center gap-2 border rounded-lg cursor-pointer transition-all text-black bg-white hover:bg-black hover:text-white hover:border-transparent dark:text-white dark:bg-black dark:hover:bg-white dark:hover:text-black duration-500">
     <span class="w-6">
       <component :is="selectedComponent" v-if="selectedComponent"></component>
     </span>
-    Sign up with {{ providerName }}
+    {{ buttonCaption }} {{ providerName }}
   </button>
 </template>
 
@@ -14,12 +14,16 @@ import IconGoogle from '@/components/svg/IconGoogle.vue';
 
 const props = defineProps<{
   provider: 'github' | 'google';
+  shouldRegister: boolean;
 }>();
 
 const providerName = computed(() => ({
   google: 'Google',
   github: 'GitHub',
 }[props.provider] || 'Undefined'));
+const buttonCaption = computed (() => (
+  props.shouldRegister ? `Sign up with` : `Sign in with`
+))
 
 const componentsMap = {
   github: IconGitHub,

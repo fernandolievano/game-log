@@ -1,11 +1,11 @@
 <template>
   <section class="p-4 flex items-center justify-center">
-    <LoginForm />
+    <AuthForm title="Welcome back!" :should-register="false" />
   </section>
 </template>
 
 <script lang="ts" setup>
-import LoginForm from '@/components/auth/LoginForm.vue';
+import AuthForm from '@/components/auth/AuthForm.vue';
 
 definePageMeta({
   layout: 'auth',
