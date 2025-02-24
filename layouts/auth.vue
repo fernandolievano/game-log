@@ -26,12 +26,23 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores/user';
 
+useHead({
+  title: 'GameLog',
+  script: [
+    {
+      children: `(function() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })()`
+    }
+  ]
+});
 const userStore = useUserStore();
-
 onBeforeMount(async () => {
-  // if (userStore.user != null) {
-  //   navigateTo('/');
-  // }
   userStore.fetchUser();
 });
 </script>

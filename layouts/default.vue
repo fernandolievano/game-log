@@ -1,20 +1,19 @@
 <template>
   <Suspense>
     <template #default>
-      <div v-if="!userStore.loading" class="min-h-screen w-full p-0 m-0 bg-gray-one text-white font-poppins">
+      <div v-if="!userStore.loading"
+        class="min-h-screen dark:bg-black dark:text-white bg-white text-black font-poppins p-4 xl:p-8 transition-colors">
         <NuxtLoadingIndicator />
         <!-- navbar -->
+        <AppBar />
         <!-- navbar -->
+
         <!-- aside -->
         <!-- aside -->
+
         <!-- content -->
         <NuxtPage />
         <!-- content -->
-
-        <div class="py-8 text-center">
-            <button class="py-3 px-8 bg-gradient-to-br from-blue-500 to-purple-400 text-white rounded-lg cursor-pointer transition-transform hover:scale-110" @click="userStore.logout">LOGOUT TESTING
-          </button>
-        </div>
       </div>
     </template>
 
@@ -28,15 +27,25 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
+import AppBar from '@/components/layout/AppBar.vue';
 
 useHead({
-  title: 'GameLog'
+  title: 'GameLog',
+  script: [
+    {
+      children: `(function() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })()`
+    }
+  ]
 });
 const userStore = useUserStore();
 onBeforeMount(async () => {
-  // if (userStore.user != null) {
-  //   navigateTo('/');
-  // }
   userStore.fetchUser();
 });
 </script>

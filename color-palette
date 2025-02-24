@@ -5,3 +5,5 @@ gray-one: #696969
 gray-two: #a9a9a9
 gray-three: #c0c0c0
 white: #fff
+night: #0a090c;
+day: #f0edee;
