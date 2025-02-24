@@ -1,7 +1,7 @@
 <template>
   <button
     class="w-12 h-12 rounded-full cursor-pointer transition-transform hover:scale-110 flex items-center justify-center text-current"
-    @click="changeTheme">
+    @click="changeTheme" aria-label="Change theme" title="Change theme">
     <LoaderCircle v-if="!isMounted" class="animate-spin" />
     <span v-else>
       <Sun v-if="theme === 'dark'" />
