@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   devtools: { enabled: true },
   modules: ['@pinia/nuxt', '@nuxt/test-utils/module'],
+  nitro: {
+    routeRules: {
+      '/api/**': { swr: false }
+    }
+  },
   runtimeConfig: {
     public: {
       supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,
