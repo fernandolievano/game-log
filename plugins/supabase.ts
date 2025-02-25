@@ -1,11 +1,8 @@
-import { createClient } from '@supabase/supabase-js';
+import { useSupabase } from '@/utils/supabase';
 import { useUserStore } from '@/stores/user';
 
-export default defineNuxtPlugin(() => {
-  const supabaseUrl = useRuntimeConfig().public.supabaseUrl as string;
-  const supabaseKey = useRuntimeConfig().public.supabaseKey as string;
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
+export default defineNuxtPlugin((nuxtApp) => {
+  const supabase = useSupabase();
   const userStore = useUserStore();
 
   supabase.auth.onAuthStateChange((event, session) => {
