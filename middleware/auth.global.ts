@@ -1,34 +1,28 @@
 import { useUserStore } from '@/stores/user';
-import { defineNuxtRouteMiddleware, useNuxtApp } from '#app';
-import Cookies from 'universal-cookie';
+import { defineNuxtRouteMiddleware, navigateTo } from '#app';
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const userStore = useUserStore();
-  const { ssrContext } = useNuxtApp();
-  const cookies = new Cookies(ssrContext?.event?.node?.req?.headers?.cookie || '');
-
-  const userFromCookie = cookies.get('user');
-
-  console.log('🚀 Servidor:', !!ssrContext);
+  // Ensure user state is populated
   if (!userStore.user) {
     await userStore.fetchUser();
   }
 
-  const user = userStore.user || userFromCookie;
-  const pathIsAuth = to.path.startsWith('/login') || to.path.startsWith('/register');
+  const isAuthenticated = !!userStore.user;
+  const isAuthPage = ['/login', '/register'].includes(to.path);
 
-  if (!user && !pathIsAuth) {
-    console.log('❌ Usuario no autenticado, redirigiendo a login');
+  if (!isAuthenticated && !isAuthPage) {
+    console.log('❌ user not logged in, redirecting to login');
     return navigateTo('/login', { replace: true });
   }
 
-  if (user && pathIsAuth) {
-    console.log('✅ Usuario autenticado, redirigiendo a home');
+  if (isAuthenticated && isAuthPage) {
+    console.log('✅ user authenticated, redirecting to home');
     return navigateTo('/', { replace: true });
   }
 
-  if (user && to.path === '/logout') {
-    console.log('👋 Usuario autenticado, cerrando sesión...');
+  if (isAuthenticated && to.path === '/logout') {
+    console.log('👋 user authenticated, login out...');
     await userStore.logout();
     return navigateTo('/login', { replace: true });
   }

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import SigninForm from '@/components/auth/AuthForm.vue';
+import AuthForm from '@/components/auth/AuthForm.vue';
 
 definePageMeta({
   layout: 'auth',

@@ -7,76 +7,31 @@ export const useAuth = () => {
   const errorMessage = ref<string | null>(null);
   const { fetchUser } = useUserStore();
 
-  const registerUser = async (email: string, password: string) => {
+  async function handleAuthRequest(authFunc: () => Promise<AuthResponse | OAuthResponse>) {
     isLoading.value = true;
     errorMessage.value = null;
 
     try {
-      const { error, data }: AuthResponse = await $supabase.auth.signUp({
-        email,
-        password
-      });
-      if (error) return (errorMessage.value = error.message);
+      const { error } = await authFunc();
+      if (error) throw new Error(error.message);
       await fetchUser();
       navigateTo('/');
     } catch (err: unknown) {
-      console.error('Unexpected error during registration:', err);
-      if (err instanceof Error) {
-        errorMessage.value = err.message;
-      } else {
-        errorMessage.value = 'An unexpected error ocurred.';
-      }
+      console.error('Authentication error:', err);
+      errorMessage.value = err instanceof Error ? err.message : 'An unexpected error occurred.';
     } finally {
       isLoading.value = false;
     }
-  };
-  const loginUser = async (email: string, password: string) => {
-    isLoading.value = true;
-    errorMessage.value = null;
+  }
 
-    try {
-      const { error, data }: AuthResponse = await $supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+  const registerUser = (email: string, password: string) =>
+    handleAuthRequest(() => $supabase.auth.signUp({ email, password }));
 
-      if (error) return (errorMessage.value = error.message);
-      await fetchUser();
-      navigateTo('/');
-    } catch (err: unknown) {
-      console.error('Unexpected error during registration:', err);
-      if (err instanceof Error) {
-        errorMessage.value = err.message;
-      } else {
-        errorMessage.value = 'An unexpected error ocurred.';
-      }
-    } finally {
-      isLoading.value = false;
-    }
-  };
-  const loginUserOAuth = async (provider: 'google' | 'github') => {
-    isLoading.value = true;
-    errorMessage.value = null;
+  const loginUser = (email: string, password: string) =>
+    handleAuthRequest(() => $supabase.auth.signInWithPassword({ email, password }));
 
-    try {
-      const { data, error }: OAuthResponse = await $supabase.auth.signInWithOAuth({
-        provider
-      });
-
-      if (error) return (errorMessage.value = error.message);
-      await fetchUser();
-      navigateTo('/');
-    } catch (err: unknown) {
-      console.error('Unexpected error during registration:', err);
-      if (err instanceof Error) {
-        errorMessage.value = err.message;
-      } else {
-        errorMessage.value = 'An unexpected error ocurred.';
-      }
-    } finally {
-      isLoading.value = false;
-    }
-  };
+  const loginUserOAuth = (provider: 'google' | 'github') =>
+    handleAuthRequest(() => $supabase.auth.signInWithOAuth({ provider }));
 
   return {
     registerUser,
@@ -84,6 +39,6 @@ export const useAuth = () => {
     loginUserOAuth,
     errorMessage,
     isLoading,
-    $supabase
+    $supabase,
   };
 };

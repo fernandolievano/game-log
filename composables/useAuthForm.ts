@@ -1,31 +1,44 @@
 import { z, ZodError } from 'zod';
 
 export const useAuthForm = () => {
+  // Define form validation schema
   const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6, 'Password should be at least 6 characters.')
+    email: z.string().email({ message: 'Invalid email address.' }),
+    password: z.string().min(6, { message: 'Password should be at least 6 characters.' })
   });
 
   type FormType = z.infer<typeof formSchema>;
 
-  const formData = ref<FormType>({
-    email: '',
-    password: ''
-  });
+  // Reactive form state
+  const formData = ref<FormType>({ email: '', password: '' });
 
-  const formErrors = ref<Partial<Record<keyof FormType, string[]>>>({});
+  // Reactive error state (shallowRef to optimize reactivity)
+  const formErrors = shallowRef<Partial<Record<keyof FormType, string[]>>>({});
 
-  const validateForm = async () => {
+  // Validates the form and sets errors
+  const validateForm = async (): Promise<boolean> => {
     try {
       formSchema.parse(formData.value);
-      formErrors.value = {};
-    } catch (err: unknown) {
+      resetValidation(); // Clear errors if validation passes
+      return true;
+    } catch (err) {
       if (err instanceof ZodError) {
         formErrors.value = err.formErrors.fieldErrors;
-        console.error('Errores', formErrors.value);
+        console.error('Validation errors:', formErrors.value);
       }
-      throw err;
+      return false;
     }
+  };
+
+  // Resets form fields
+  const resetForm = () => {
+    formData.value = { email: '', password: '' };
+    resetValidation();
+  };
+
+  // Clears validation errors without resetting the form fields
+  const resetValidation = () => {
+    formErrors.value = {};
   };
 
   return {
@@ -33,5 +46,7 @@ export const useAuthForm = () => {
     formData,
     formErrors,
     validateForm,
+    resetForm,
+    resetValidation,
   };
 };

@@ -8,10 +8,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
       userStore.user = session?.user ?? null;
-      userStore.persistUser();
     } else if (event === 'SIGNED_OUT') {
       userStore.user = null;
-      userStore.persistUser();
     }
   });
 
