@@ -24,6 +24,7 @@ export default defineNuxtConfig({
       supabaseKey: process.env.NUXT_PUBLIC_SUPABASE_KEY
     }
   },
+  ssr: true,
   vite: {
     plugins: [
       tailwindcss(),

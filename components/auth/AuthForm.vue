@@ -47,17 +47,17 @@ const props = defineProps<{
   shouldRegister: boolean;
 }>();
 
-const { isLoading, registerUser, loginUser, loginUserOAuth, errorMessage } = useAuth();
+const { isLoading, registerUser, login, loginUserOAuth, errorMessage } = useAuth();
 const { formData, formErrors, validateForm, resetForm } = useAuthForm();
 
-// Computed property for dynamic auth method
-const authMethod = computed(() => (props.shouldRegister ? registerUser : loginUser));
+const authMethod = computed(() => (props.shouldRegister ? registerUser : login));
 
 const handleForm = async () => {
   try {
     await validateForm();
     await authMethod.value(formData.value.email, formData.value.password);
     resetForm(); // Clears form fields
+    navigateTo('/');
   } catch (err) {
     console.error('Form submission error:', err);
   }
