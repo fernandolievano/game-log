@@ -53,13 +53,18 @@ const { formData, formErrors, validateForm, resetForm } = useAuthForm();
 const authMethod = computed(() => (props.shouldRegister ? registerUser : login));
 
 const handleForm = async () => {
-  try {
-    await validateForm();
-    await authMethod.value(formData.value.email, formData.value.password);
-    resetForm(); // Clears form fields
-    navigateTo('/');
-  } catch (err) {
-    console.error('Form submission error:', err);
+  if (formErrors.value != null) {
+    try {
+      const isValid = await validateForm();
+
+      if (isValid) {
+        await authMethod.value(formData.value.email, formData.value.password);
+        resetForm();
+        navigateTo('/');
+      }
+    } catch (err) {
+      console.error('Form submission error:', err);
+    }
   }
 };
 

@@ -3,6 +3,38 @@ import { useUserStore } from '@/stores/user';
 export const useAuthService = () => {
   const userStore = useUserStore();
 
+  const registerUser = async (email: string, password: string) => {
+    try {
+      const { data, error } = await $fetch('/api/auth/register', {
+        method: 'post',
+        body: { email, password }
+      });
+
+      if (error) {
+        throw new Error(error);
+      }
+      await userStore.fetchUser(data?.session?.access_token);
+      return {
+        error: false,
+        data,
+        message: 'User registered successfully!',
+      };
+    } catch (err) {
+      console.error('Register failed at service:', err); // Log actual error for debugging
+      if (err instanceof Error) {
+        return {
+          error: true,
+          data: null,
+          message: err.message
+        };
+      }
+      return {
+        error: true,
+        data: null,
+        message: 'An unexpected error occurred.',
+      };
+    }
+  };
   const loginUser = async (email: string, password: string) => {
     try {
       const { data, error } = await $fetch('/api/auth/login', {
@@ -37,9 +69,6 @@ export const useAuthService = () => {
   };
 
   const loginUserOAuth = async () => {
-
-  };
-  const registerUser = async () => {
 
   };
 
