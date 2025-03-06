@@ -47,10 +47,10 @@ const props = defineProps<{
   shouldRegister: boolean;
 }>();
 
-const { isLoading, registerUser, login, loginUserOAuth, errorMessage } = useAuth();
+const { isLoading, register, login, loginOAuth, errorMessage } = useAuth();
 const { formData, formErrors, validateForm, resetForm } = useAuthForm();
 
-const authMethod = computed(() => (props.shouldRegister ? registerUser : login));
+const authMethod = computed(() => (props.shouldRegister ? register : login));
 
 const handleForm = async () => {
   if (formErrors.value != null) {
@@ -70,7 +70,8 @@ const handleForm = async () => {
 
 const handleOAuth = async (provider: 'google' | 'github') => {
   try {
-    await loginUserOAuth(provider);
+    await loginOAuth(provider);
+    navigateTo('/');
   } catch (err) {
     console.error(`OAuth login error: ${err}`);
   }

@@ -1,10 +1,9 @@
 import { useUserStore } from '@/stores/user';
 import { defineNuxtRouteMiddleware, navigateTo } from '#app';
 
-export default defineNuxtRouteMiddleware(async (to) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const userStore = useUserStore();
   const userCookie = useCookie('user');
-  const accessTokenCookie = useCookie('access_token');
 
   // Check if the user cookie exists and is not empty
   if (userCookie.value) {
@@ -14,9 +13,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       : userCookie.value; // If it's already an object, no need to parse
 
     userStore.setUser(parsedUser);
-  }
-  if (!userCookie.value && accessTokenCookie.value) {
-    await userStore.fetchUser(accessTokenCookie.value);
+  } else {
+    await userStore.fetchUser();
   }
 
   const isAuthenticated = !!userStore.user;

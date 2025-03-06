@@ -45,7 +45,4 @@ useHead({
   ]
 });
 const userStore = useUserStore();
-onBeforeMount(async () => {
-  userStore.fetchUser();
-});
 </script>

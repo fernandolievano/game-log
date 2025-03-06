@@ -8,37 +8,24 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
-    async fetchUser(accessToken?: string) {
-      if (accessToken) {
-        try {
-          const { $supabase } = useNuxtApp();
-          const { data: authUser, error } = await $supabase.auth.getUser(accessToken);
+    async fetchUser() {
+      try {
+        const { $supabase } = useNuxtApp();
+        const { data: authUser, error } = await $supabase.auth.getUser();
 
-          if (error) throw new Error(error.message);
-          if (!authUser.user) return;
+        if (error) throw new Error(error.message);
+        if (!authUser.user) return;
 
-          this.setUser(authUser.user);
-          await this.persistSession();
-        } catch (err) {
-          console.error('Failed to fetch user:', err);
-        } finally {
-          this.loading = false;
-        }
+        this.setUser(authUser.user);
+      } catch (err) {
+        console.error('Failed to fetch user:', err);
+      } finally {
+        this.loading = false;
       }
     },
     setUser(user: User) {
       this.user = user;
       this.loading = false;
-    },
-    async persistSession() {
-      try {
-        await $fetch('/api/auth/session', {
-          method: 'POST',
-          credentials: 'include', // Ensures the cookie is sent
-        });
-      } catch (err) {
-        console.error('Error persisting session:', err);
-      }
     },
     async logout() {
       try {

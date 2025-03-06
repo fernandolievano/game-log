@@ -3,6 +3,36 @@ import { useUserStore } from '@/stores/user';
 export const useAuthService = () => {
   const userStore = useUserStore();
 
+  const fetchUser = async (shouldRedirect = false) => {
+    try {
+      const { data, error } = await $fetch('/api/auth/user');
+
+      if (error) {
+        throw new Error(error);
+      }
+      console.log(data);
+      if (data != null) {
+        userStore.setUser(data.user);
+      }
+      if (shouldRedirect) {
+        navigateTo('/');
+      }
+    } catch (err) {
+      console.error('Fetch user failed at service:', err); // Log actual error for debugging
+      if (err instanceof Error) {
+        return {
+          error: true,
+          data: null,
+          message: err.message
+        };
+      }
+      return {
+        error: true,
+        data: null,
+        message: 'An unexpected error occurred.',
+      };
+    }
+  };
   const registerUser = async (email: string, password: string) => {
     try {
       const { data, error } = await $fetch('/api/auth/register', {
@@ -13,7 +43,7 @@ export const useAuthService = () => {
       if (error) {
         throw new Error(error);
       }
-      await userStore.fetchUser(data?.session?.access_token);
+      await fetchUser();
       return {
         error: false,
         data,
@@ -45,7 +75,7 @@ export const useAuthService = () => {
       if (error) {
         throw new Error(error);
       }
-      await userStore.fetchUser(data?.session.access_token);
+      await fetchUser();
       return {
         error: false,
         data,
@@ -68,13 +98,9 @@ export const useAuthService = () => {
     }
   };
 
-  const loginUserOAuth = async () => {
-
-  };
-
   return {
     loginUser,
-    loginUserOAuth,
-    registerUser
+    registerUser,
+    fetchUser
   };
 };

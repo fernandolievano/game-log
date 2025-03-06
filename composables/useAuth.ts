@@ -1,30 +1,27 @@
-import type { AuthResponse, OAuthResponse } from '@supabase/supabase-js';
 import { useAuthService } from '@/services/auth';
 
 export const useAuth = () => {
   const { $supabase } = useNuxtApp();
-  const { loginUser, registerUser } = useAuthService();
+  const { loginUser, registerUser, fetchUser } = useAuthService();
   const isLoading = ref(false);
   const errorMessage = ref<string | null>(null);
 
-  async function handleAuthRequest(authFunc: () => Promise<AuthResponse | OAuthResponse>) {
+
+  const loginOAuth = async (provider: 'google' | 'github') => {
     isLoading.value = true;
     errorMessage.value = null;
 
     try {
-      const { error } = await authFunc();
+      const { data, error } = await $supabase.auth.signInWithOAuth({ provider });
+      console.log('O AUTH RES: ', data);
       if (error) throw new Error(error.message);
-      navigateTo('/');
-    } catch (err: unknown) {
-      console.error('Authentication error:', err);
-      errorMessage.value = err instanceof Error ? err.message : 'An unexpected error occurred.';
-    } finally {
-      isLoading.value = false;
+      await fetchUser();
+      return;
+    } catch (error) {
+      console.error('OAuth Error: ', error);
     }
-  }
 
-  const loginUserOAuth = (provider: 'google' | 'github') =>
-    handleAuthRequest(() => $supabase.auth.signInWithOAuth({ provider }));
+  };
 
   const login = async (email: string, password: string) => {
     isLoading.value = true;
@@ -50,6 +47,7 @@ export const useAuth = () => {
 
     try {
       const { error, message } = await registerUser(email, password);
+      if (error) throw new Error(message);
       console.log(message); // show succesful message
     } catch (err) {
       if (err instanceof Error) {
@@ -63,9 +61,9 @@ export const useAuth = () => {
   };
 
   return {
-    registerUser,
+    register,
     login,
-    loginUserOAuth,
+    loginOAuth,
     errorMessage,
     isLoading,
     $supabase,
