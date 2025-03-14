@@ -1,34 +1,48 @@
+import { defineNuxtRouteMiddleware, navigateTo } from '#app';
 import { useUserStore } from '@/stores/user';
-import { defineNuxtRouteMiddleware, useNuxtApp } from '#app';
-import Cookies from 'universal-cookie';
+import { useAuthService } from '@/services/auth';
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  const authService = useAuthService();
+  const hash = to.hash;
+
+  // Check access_token and refresh token are in the url
+  // and save them into cookies
+  if (hash) {
+    await authService.setSession(hash);
+  }
+
+  const userCookie = useCookie('user');
   const userStore = useUserStore();
-  const { ssrContext } = useNuxtApp();
-  const cookies = new Cookies(ssrContext?.event?.node?.req?.headers?.cookie || '');
 
-  const userFromCookie = cookies.get('user');
+  // Check if the user cookie exists and is not empty
+  if (userCookie.value) {
+    // If the cookie is a string, parse it into an object
+    const parsedUser = typeof userCookie.value === 'string'
+      ? JSON.parse(userCookie.value)
+      : userCookie.value; // If it's already an object, no need to parse
 
-  console.log('🚀 Servidor:', !!ssrContext);
-  if (!userStore.user) {
+    userStore.setUser(parsedUser);
+  } else {
     await userStore.fetchUser();
   }
 
-  const user = userStore.user || userFromCookie;
-  const pathIsAuth = to.path.startsWith('/login') || to.path.startsWith('/register');
+  const isAuthenticated = !!userStore.user;
+  const isAuthPage = /^\/(login|register)([?#].*)?$/.test(to.path);
 
-  if (!user && !pathIsAuth) {
-    console.log('❌ Usuario no autenticado, redirigiendo a login');
+  /* Redirect Logic */
+  if (!isAuthenticated && !isAuthPage) {
+    console.log('❌ User not logged in, redirecting to login');
     return navigateTo('/login', { replace: true });
   }
 
-  if (user && pathIsAuth) {
-    console.log('✅ Usuario autenticado, redirigiendo a home');
-    return navigateTo('/', { replace: true });
+  if (isAuthenticated && isAuthPage) {
+    console.log('✅ User authenticated, redirecting to home');
+    return navigateTo('/');
   }
 
-  if (user && to.path === '/logout') {
-    console.log('👋 Usuario autenticado, cerrando sesión...');
+  if (isAuthenticated && to.path === '/logout') {
+    console.log('👋 User authenticated, logging out...');
     await userStore.logout();
     return navigateTo('/login', { replace: true });
   }
