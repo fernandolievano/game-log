@@ -97,10 +97,55 @@ export const useAuthService = () => {
       };
     }
   };
+  const setSession = async (hash: string) => {
+    try {
+      const params = new URLSearchParams(hash.slice(1));
+
+      // Now we can get individual parameters
+      const accessToken = params.get('access_token');
+      const refreshToken = params.get('refresh_token');
+
+      console.log('🚨 Access Token:', accessToken);
+      console.log('🚨 Refresh Token:', refreshToken);
+
+      const { data, error } = await $fetch('/api/auth/session', {
+        method: 'post',
+        body: {
+          accessToken,
+          refreshToken,
+        }
+      });
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      return {
+        error: false,
+        data,
+        message: 'Session retrieved!'
+      };
+    } catch (err) {
+      console.error('Session failed at service:', err); // Log actual error for debugging
+      if (err instanceof Error) {
+        return {
+          error: true,
+          data: null,
+          message: err.message
+        };
+      }
+      return {
+        error: true,
+        data: null,
+        message: 'An unexpected error occurred.',
+      };
+    }
+  };
 
   return {
     loginUser,
     registerUser,
-    fetchUser
+    fetchUser,
+    setSession
   };
 };

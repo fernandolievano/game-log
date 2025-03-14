@@ -1,9 +1,19 @@
-import { useUserStore } from '@/stores/user';
 import { defineNuxtRouteMiddleware, navigateTo } from '#app';
+import { useUserStore } from '@/stores/user';
+import { useAuthService } from '@/services/auth';
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const userStore = useUserStore();
+  const authService = useAuthService();
+  const hash = to.hash;
+
+  // Check access_token and refresh token are in the url
+  // and save them into cookies
+  if (hash) {
+    await authService.setSession(hash);
+  }
+
   const userCookie = useCookie('user');
+  const userStore = useUserStore();
 
   // Check if the user cookie exists and is not empty
   if (userCookie.value) {
@@ -18,7 +28,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   const isAuthenticated = !!userStore.user;
-  const isAuthPage = ['/login', '/register'].includes(to.path);
+  const isAuthPage = /^\/(login|register)([?#].*)?$/.test(to.path);
 
   /* Redirect Logic */
   if (!isAuthenticated && !isAuthPage) {
