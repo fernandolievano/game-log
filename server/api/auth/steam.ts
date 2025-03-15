@@ -1,5 +1,7 @@
+import { setCookie } from 'h3';
+
 export default defineEventHandler(async (event) => {
-  const redirectUri = 'http://localhost:3000/api/auth/steam/callback';
+  const redirectUri = 'http://localhost:3000/api/steam/callback';
 
   const authUrl = new URL('https://steamcommunity.com/openid/login');
   authUrl.searchParams.append('openid.ns', 'http://specs.openid.net/auth/2.0');

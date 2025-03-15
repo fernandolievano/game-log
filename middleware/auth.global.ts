@@ -15,7 +15,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const userCookie = useCookie('user');
   const userStore = useUserStore();
 
-  // Check if the user cookie exists and is not empty
   if (userCookie.value) {
     // If the cookie is a string, parse it into an object
     const parsedUser = typeof userCookie.value === 'string'
@@ -30,7 +29,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const isAuthenticated = !!userStore.user;
   const isAuthPage = /^\/(login|register)([?#].*)?$/.test(to.path);
 
-  /* Redirect Logic */
   if (!isAuthenticated && !isAuthPage) {
     console.log('❌ User not logged in, redirecting to login');
     return navigateTo('/login', { replace: true });

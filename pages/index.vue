@@ -16,11 +16,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useCookie } from '#app';
 import IconSteam from '@/components/svg/IconSteam.vue';
 
-const steamId = useCookie('steamid'); // Leer la cookie con el Steam ID
+const steamId = useCookie('steamid');
 const connectWithSteam = () => {
   window.location.href = "http://localhost:3000/api/auth/steam";
-}
+};
 </script>
