@@ -11,15 +11,25 @@
           <IconSteam class="w-6" />
         </span>
       </AppButton>
+
+      <AppButton class="my-8 mx-auto uppercase w-fit" @click="testSummary">
+        TEST SUMMARY ENDPOINT
+      </AppButton>
     </section>
   </main>
 </template>
 
 <script lang="ts" setup>
 import IconSteam from '@/components/svg/IconSteam.vue';
+import { useSteamStore } from '@/stores/steam';
 
 const steamId = useCookie('steamid');
+const steamStore = useSteamStore();
 const connectWithSteam = () => {
   window.location.href = "http://localhost:3000/api/auth/steam";
+};
+
+const testSummary = async () => {
+  await steamStore.getPlayerSummary();
 };
 </script>
