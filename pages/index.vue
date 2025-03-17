@@ -4,16 +4,11 @@
       <h2 class="text-2xl mb-8">
         Track your game stats with Steam API!
       </h2>
-      <p v-if="steamId">Tu Steam ID: {{ steamId }}</p>
-      <AppButton v-else @click="connectWithSteam" class="uppercase max-w-[400px] mx-auto">
+      <AppButton v-if="!steamId" @click="connectWithSteam" class="uppercase max-w-[400px] mx-auto">
         <span class="flex items-center justify-center gap-2 text-xs md:text-base">
           Connect with Steam
           <IconSteam class="w-6" />
         </span>
-      </AppButton>
-
-      <AppButton class="my-8 mx-auto uppercase w-fit" @click="testSummary">
-        TEST SUMMARY ENDPOINT
       </AppButton>
     </section>
   </main>
@@ -21,15 +16,9 @@
 
 <script lang="ts" setup>
 import IconSteam from '@/components/svg/IconSteam.vue';
-import { useSteamStore } from '@/stores/steam';
 
 const steamId = useCookie('steamid');
-const steamStore = useSteamStore();
 const connectWithSteam = () => {
   window.location.href = "http://localhost:3000/api/auth/steam";
-};
-
-const testSummary = async () => {
-  await steamStore.getPlayerSummary();
 };
 </script>

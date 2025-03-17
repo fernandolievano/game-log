@@ -5,8 +5,6 @@ export default defineEventHandler(async (event) => {
   const STEAM_KEY = process.env.STEAM_KEY || null;
   const STEAM_ID = getCookie(event, 'steamid');
 
-  console.log('key:', STEAM_KEY);
-  console.log('id:', STEAM_ID);
   if (STEAM_KEY && STEAM_ID) {
     try {
       const URL = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_KEY}&steamids=${STEAM_ID}`;
@@ -26,6 +24,6 @@ export default defineEventHandler(async (event) => {
       };
     }
   } else {
-    console.error('Missing API Key or Steam ID');
+    console.error('❓ Missing API Key or Steam ID');
   }
 });
