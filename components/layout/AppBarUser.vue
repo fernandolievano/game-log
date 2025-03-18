@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-fit">
+  <div class="relative w-fit" v-if="player">
     <!-- user actions -->
     <AppButtonBar class="w-fit flex items-center justify-start"
       :class="[showPlayerWidget ? 'bg-day dark:bg-night' : 'bg-white dark:bg-black']" @click="handlePlayerWidget">
