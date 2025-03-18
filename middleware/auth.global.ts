@@ -29,6 +29,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const isAuthenticated = userStore.user != null; // check if user is available on store
   const isAuthPage = /^\/(login|register)([?#].*)?$/.test(to.path);
 
+  if (isAuthenticated) {
+    console.log('🎮 Retrieving Steam data...');
+    await steamStore.getPlayerSummary();
+  }
+
   if (!isAuthenticated && !isAuthPage) {
     console.log('❌ User not logged in, redirecting to login');
     return navigateTo('/login', { replace: true });
@@ -36,8 +41,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   if (isAuthenticated && isAuthPage) {
     console.log('✅ User authenticated, redirecting to home');
-    // fetch steam data
-    await steamStore.getPlayerSummary();
     return navigateTo('/', { replace: true });
   }
 
