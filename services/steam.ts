@@ -1,19 +1,20 @@
 import type { SteamPlayer } from '@/interfaces/steam';
+interface SteamSummaryResponse {
+  data: {
+    players: SteamPlayer[];
+  };
+  error: any;
+  ok: boolean;
+}
 
 export const useSteamService = () => {
   const fetchPlayerSummary = async () => {
-    interface SteamSummaryResponse {
-      data: {
-        players: SteamPlayer[];
-      };
-      error: any;
-      ok: boolean;
-    }
+
     try {
-      const { data, error, ok }: SteamSummaryResponse = await $fetch('/api/steam/summary');
+      const response = await $fetch<SteamSummaryResponse>('/api/steam/summary');
+      const { data, error, ok } = response;
 
       if (error) throw new Error(error);
-      console.log('data is: ', data);
       return {
         data,
         ok,
