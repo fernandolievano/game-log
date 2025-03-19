@@ -1,7 +1,7 @@
 <template>
   <main>
-    <section class="px-4 py-2 flex flex-col items-center justify-center h-full">
-      <h2 class="text-2xl mb-8">
+    <header class="px-4 py-2 flex flex-col items-center justify-center h-full">
+      <h2 v-if="steamId" class="text-2xl mb-8">
         Track your game stats with Steam API!
       </h2>
       <AppButton v-if="!steamId" @click="connectWithSteam" class="uppercase max-w-[400px] mx-auto">
@@ -10,12 +10,15 @@
           <IconSteam class="w-6" />
         </span>
       </AppButton>
-    </section>
+    </header>
+
+    <DashboardGames />
   </main>
 </template>
 
 <script lang="ts" setup>
 import IconSteam from '@/components/svg/IconSteam.vue';
+import DashboardGames from '@/components/dashboard/DashboardGames.vue';
 
 const steamId = useCookie('steamid');
 const connectWithSteam = () => {

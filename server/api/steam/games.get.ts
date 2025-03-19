@@ -1,5 +1,5 @@
 import { getCookie } from 'h3';
-import type { SteamSummaryResponse } from '@/interfaces/steam';
+import type { SteamOwnedGamesResponse } from '~/interfaces/steam';
 
 export default defineEventHandler(async (event) => {
   const STEAM_KEY = process.env.STEAM_KEY || null;
@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
 
   if (STEAM_KEY && STEAM_ID) {
     try {
-      const URL = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${STEAM_KEY}&steamids=${STEAM_ID}`;
-      const { response }: SteamSummaryResponse = await $fetch(URL);
+      const URL = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_KEY}&steamid=${STEAM_ID}&include_appinfo=true&format=json`;
+      const { response }: SteamOwnedGamesResponse = await $fetch(URL);
 
       return {
         ok: true,
@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
       };
     } catch (error) {
       console.error('❌ ', error);
-
       return {
         ok: false,
         data: null,
@@ -25,6 +24,6 @@ export default defineEventHandler(async (event) => {
       };
     }
   } else {
-    console.error('❓ Missing API Key or Steam ID while getting player summary');
+    console.error('❓ Missing API Key or Steam ID while getting player owned games');
   }
 });

@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 left-0 xl:relative w-full py-2 px-4 xl:rounded-xl h-20 xl:h-16">
+  <div class="fixed top-0 left-0 xl:relative w-full py-2 px-4 xl:rounded-xl h-20 xl:h-16 z-50">
     <div class="flex justify-between items-center h-full w-full gap-2 relative">
       <!-- menu actions -->
       <AppButtonBar class="xl:hidden border-none bg-white dark:bg-black">
