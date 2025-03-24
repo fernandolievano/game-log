@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
       const cookieOptions = {
         httpOnly: false,
         path: '/',
-        sameSite: true,
         secure: isProduction,
       };
       const userJSON = JSON.stringify(data.user);

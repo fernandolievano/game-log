@@ -18,7 +18,9 @@ interface SteamOwnedGamesResponse {
 export const useSteamService = () => {
   const fetchPlayerSummary = async () => {
     try {
-      const { data, error, ok } = await $fetch<SteamSummaryResponse>('/api/steam/summary');
+      const { data, error, ok } = await $fetch<SteamSummaryResponse>('/api/steam/summary', {
+        credentials: 'include'
+      });
 
       if (error) throw new Error(error);
 
@@ -46,7 +48,9 @@ export const useSteamService = () => {
   };
   const fetchOwnedGames = async () => {
     try {
-      const { data, error, ok } = await $fetch<SteamOwnedGamesResponse>('/api/steam/games');
+      const { data, error, ok } = await $fetch<SteamOwnedGamesResponse>('/api/steam/games', {
+        credentials: 'include'
+      });
 
       if (error) throw new Error(error);
 
