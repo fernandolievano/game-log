@@ -19,7 +19,6 @@ export default defineEventHandler(async (event) => {
     const cookieOptions = {
       httpOnly: true,
       path: '/',
-      sameSite: true,
       secure: isProduction,
     };
 

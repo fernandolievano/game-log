@@ -18,10 +18,12 @@ interface SteamOwnedGamesResponse {
 export const useSteamService = () => {
   const fetchPlayerSummary = async () => {
     try {
-      const response = await $fetch<SteamSummaryResponse>('/api/steam/summary');
-      const { data, error, ok } = response;
+      const { data, error, ok } = await $fetch<SteamSummaryResponse>('/api/steam/summary', {
+        credentials: 'include'
+      });
 
       if (error) throw new Error(error);
+
       return {
         data,
         ok,
@@ -29,12 +31,26 @@ export const useSteamService = () => {
       };
     } catch (err) {
       console.error('❌ Error at service Summary Player:', err);
+
+      if (err instanceof Error) {
+        return {
+          error: true,
+          data: null,
+          message: err.message
+        };
+      }
+      return {
+        error: true,
+        data: null,
+        message: 'An unexpected error occurred.',
+      };
     }
   };
   const fetchOwnedGames = async () => {
     try {
-      const response = await $fetch<SteamOwnedGamesResponse>('/api/steam/games');
-      const { data, error, ok } = response;
+      const { data, error, ok } = await $fetch<SteamOwnedGamesResponse>('/api/steam/games', {
+        credentials: 'include'
+      });
 
       if (error) throw new Error(error);
 
@@ -45,6 +61,19 @@ export const useSteamService = () => {
       };
     } catch (err) {
       console.error('❌ Error at service Games Owned:', err);
+
+      if (err instanceof Error) {
+        return {
+          error: true,
+          data: null,
+          message: err.message
+        };
+      }
+      return {
+        error: true,
+        data: null,
+        message: 'An unexpected error occurred.',
+      };
     }
   };
 

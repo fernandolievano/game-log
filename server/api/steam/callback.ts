@@ -19,10 +19,9 @@ export default defineEventHandler(async (event) => {
     const cookieOptions = {
       httpOnly: false,
       path: '/',
-      sameSite: true,
       secure: isProduction,
     };
-    console.log('SteamID:', steamId);
+    console.log('🎮 SteamID:', steamId);
     setCookie(event, 'steamid', steamId, cookieOptions);
   }
 

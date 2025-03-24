@@ -26,7 +26,6 @@ export default defineEventHandler(async (event) => {
       httpOnly: true,
       maxAge: data.session.expires_in,
       path: '/',
-      sameSite: true,
       secure: isProduction,
     };
 
@@ -34,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
     setCookie(event, 'access_token', data.session.access_token, cookieOptions);
     setCookie(event, 'refresh_token', data.session.refresh_token, cookieOptions);
-    setCookie(event, 'user', userJSON, cookieOptions)
+    setCookie(event, 'user', userJSON, cookieOptions);
 
     return { ok: true, data, error: null };
   } catch (err) {

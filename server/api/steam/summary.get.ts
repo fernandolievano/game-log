@@ -26,5 +26,10 @@ export default defineEventHandler(async (event) => {
     }
   } else {
     console.error('❓ Missing API Key or Steam ID while getting player summary');
+    return {
+      ok: false,
+      data: null,
+      error: '❓ Missing API Key or Steam ID while getting player summary'
+    };
   }
 });

@@ -14,8 +14,6 @@ export default defineEventHandler(async (event) => {
   try {
     const { data, error } = await supabase.auth.getUser(body.accessToken);
 
-    console.log('SESSION AT BACKEND: ', data);
-
     if (error) {
       console.error('Session failed at backend:', error.message);
       throw new Error(error.message);
@@ -23,9 +21,8 @@ export default defineEventHandler(async (event) => {
 
     if (data.user) {
       const cookieOptions = {
-        httpOnly: true,
+        httpOnly: false,
         path: '/',
-        sameSite: true,
         secure: isProduction,
       };
       const userJSON = JSON.stringify(data.user);

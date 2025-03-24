@@ -8,22 +8,8 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
-    async fetchUser() {
-      try {
-        const { $supabase } = useNuxtApp();
-        const { data: authUser, error } = await $supabase.auth.getUser();
-
-        if (error) throw new Error(error.message);
-        if (!authUser.user) return;
-
-        this.setUser(authUser.user);
-      } catch (err) {
-        console.error('Failed to fetch user:', err);
-      } finally {
-        this.loading = false;
-      }
-    },
     setUser(user: User) {
+      console.info('👋 Hello from server! We are setting user data here.');
       this.user = user;
       this.loading = false;
     },
