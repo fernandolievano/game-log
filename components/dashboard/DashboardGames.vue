@@ -15,14 +15,4 @@ import { useSteamStore } from '@/stores/steam';
 const steamStore = useSteamStore();
 const message = ref('Games not loaded yet!');
 const noGamesFound = computed(() => steamStore.games.length <= 1);
-
-
-
-onBeforeMount(async () => {
-  if (noGamesFound.value) {
-    await steamStore.getOwnedGames();
-  } else {
-    message.value = 'Games not loaded or you don\'t own any game yet.';
-  }
-});
 </script>
