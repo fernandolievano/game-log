@@ -12,7 +12,7 @@
       </AppButton>
     </header>
 
-    <DashboardGames />
+    <DashboardGames v-if="steamId" />
   </main>
 </template>
 
