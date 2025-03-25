@@ -18,8 +18,8 @@
     </template>
 
     <template #fallback>
-      <div class="loading-screen">
-        Loading... {{ userStore.loading }}
+      <div class="h-full flex justify-center items-center w-full">
+        <AppLoading />
       </div>
     </template>
   </Suspense>
