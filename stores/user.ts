@@ -15,9 +15,6 @@ export const useUserStore = defineStore('user', {
     },
     async logout() {
       try {
-        const { $supabase } = useNuxtApp();
-        await $supabase.auth.signOut();
-
         this.user = null;
 
         await $fetch('/api/auth/logout', { method: 'POST' }); // Clears cookies

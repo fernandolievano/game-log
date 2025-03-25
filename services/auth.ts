@@ -10,6 +10,10 @@ export const useAuthService = () => {
       if (error) {
         throw new Error(error);
       }
+      if (data && data.user) {
+        userStore.setUser(data.user);
+      }
+      navigateTo('/');
 
       return {
         data,

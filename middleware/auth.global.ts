@@ -57,9 +57,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    * If user is logged in, fetch user's steam data
    * Redirect based on url path and user session
    */
-  const isAuthenticated = !!userCookie.value || !!accessTokenCookie.value;
+  const isAuthenticated = !!userStore.user;
   const isAuthRoute = to.path.startsWith('/login') || to.path.startsWith('/register');
 
+  if (isAuthenticated && to.path === '/logout') {
+    console.log('👋 User authenticated, logging out...');
+    await userStore.logout();
+    return navigateTo('/login', { replace: true });
+  }
   if (isAuthenticated && !!steamidCookie.value) {
     console.log('🎮 Getting Steam data...');
     const { data: summaryData } = await steamService.fetchPlayerSummary();
@@ -80,9 +85,4 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     console.log('🔓 User authenticated, redirecting to home...');
     return navigateTo('/', { replace: true });
   };
-  if (isAuthenticated && to.path === '/logout') {
-    console.log('👋 User authenticated, logging out...');
-    await userStore.logout();
-    return navigateTo('/login', { replace: true });
-  }
 });
