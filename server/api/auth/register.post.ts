@@ -28,7 +28,6 @@ export default defineEventHandler(async (event) => {
         httpOnly: true,
         maxAge: data.session.expires_in,
         path: '/',
-        sameSite: true,
         secure: isProduction,
       };
       const userJSON = JSON.stringify(data.user);

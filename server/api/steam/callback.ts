@@ -1,6 +1,7 @@
 import { parse } from 'url';
 
 export default defineEventHandler(async (event) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   const { query } = parse(getRequestURL(event).toString(), true);
 
   if (!query['openid.claimed_id']) {
@@ -15,8 +16,13 @@ export default defineEventHandler(async (event) => {
 
   // Guardar en una cookie solo si el steamId no está vacío
   if (steamId) {
-    console.log('SteamID:', steamId);
-    setCookie(event, 'steamid', steamId, { httpOnly: true });
+    const cookieOptions = {
+      httpOnly: false,
+      path: '/',
+      secure: isProduction,
+    };
+    console.log('🎮 SteamID:', steamId);
+    setCookie(event, 'steamid', steamId, cookieOptions);
   }
 
   return sendRedirect(event, '/');

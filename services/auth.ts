@@ -3,20 +3,23 @@ import { useUserStore } from '@/stores/user';
 export const useAuthService = () => {
   const userStore = useUserStore();
 
-  const fetchUser = async (shouldRedirect = false) => {
+  const fetchUser = async () => {
     try {
       const { data, error } = await $fetch('/api/auth/user');
 
       if (error) {
         throw new Error(error);
       }
-      console.log(data);
-      if (data != null) {
+      if (data && data.user) {
         userStore.setUser(data.user);
       }
-      if (shouldRedirect) {
-        navigateTo('/');
-      }
+      navigateTo('/');
+
+      return {
+        data,
+        error: false,
+        message: 'User data retrieved successfully!'
+      };
     } catch (err) {
       console.error('Fetch user failed at service:', err); // Log actual error for debugging
       if (err instanceof Error) {
@@ -104,9 +107,6 @@ export const useAuthService = () => {
       // Now we can get individual parameters
       const accessToken = params.get('access_token');
       const refreshToken = params.get('refresh_token');
-
-      console.log('🚨 Access Token:', accessToken);
-      console.log('🚨 Refresh Token:', refreshToken);
 
       const { data, error } = await $fetch('/api/auth/session', {
         method: 'post',
