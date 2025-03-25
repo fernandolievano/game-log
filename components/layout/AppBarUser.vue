@@ -18,6 +18,11 @@
     </transition>
     <!-- user actions -->
   </div>
+  <div v-else class="relative w-fit">
+    <AppButtonBar class="bg-white dark:bg-black" aria-label="Log Out" title="Log Out" @click="handleLogout">
+      <LogOut />
+    </AppButtonBar>
+  </div>
 </template>
 
 <script lang="ts" setup>
