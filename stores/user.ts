@@ -16,10 +16,9 @@ export const useUserStore = defineStore('user', {
     async logout() {
       try {
         this.user = null;
+        await $fetch('/api/auth/logout', { method: 'POST' });
 
-        await $fetch('/api/auth/logout', { method: 'POST' }); // Clears cookies
-
-        navigateTo('/login');
+        navigateTo('/login', { replace: true });
       } catch (err) {
         console.error('Logout failed:', err);
       }
