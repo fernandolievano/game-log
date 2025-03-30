@@ -1,16 +1,13 @@
 <template>
-  <div class="fixed h-full w-[200px] pr-4 -left-[20000px] xl:left-8 top-20 z-50 transition-all pb-20"
-    :class="{ 'menu-active-wrapper': menuIsActive }">
+  <div
+    class="fixed h-full pr-4 -left-[200000px] top-20 z-50 pb-20 opacity-0 xl:opacity-100 xl:left-8 xl:w-[200px] menu-wrapper"
+    :class="{ 'menu-active-wrapper': uiStore.menuIsActive }">
     <div ref="menuRef"
       class="h-[calc(100%-16px)] w-full bg-gray-50 dark:bg-[#111111] border border-day dark:border-night rounded-2xl p-4 flex flex-col justify-start items-start gap-4 overflow-y-auto"
-      :class="{ 'menu-active': menuIsActive }">
-      <NuxtLink to="/"
+      :class="{ 'menu-active': uiStore.menuIsActive }">
+      <NuxtLink v-for="link in uiStore.menuLinks" :key="link.path" :to="link.path"
         class="w-full py-3 px-4 text-center flex items-center justify-start gap-3 transition-all hover:bg-day dark:hover:bg-night rounded-xl cursor-pointer">
-        <LayoutDashboard /> Dashboard
-      </NuxtLink>
-      <NuxtLink to="/random-path"
-        class="w-full py-3 px-4 text-center flex items-center justify-start gap-3 transition-all hover:bg-day dark:hover:bg-night rounded-xl cursor-pointer">
-        <Signal /> 404
+        <component :is="getIconComponent(link.icon)" /> {{ link.name }}
       </NuxtLink>
       <NuxtLink to="/logout"
         class="w-full py-3 px-4 text-center mt-auto flex items-center justify-start gap-3 transition-all hover:bg-day dark:hover:bg-night rounded-xl cursor-pointer">
@@ -23,34 +20,32 @@
 
 <script lang="ts" setup>
 import { LogOut, LayoutDashboard, Signal } from 'lucide-vue-next';
-const menuIsActive = ref<boolean>(false);
-const menuRef = ref<HTMLElement | null>(null);
-const pages = ref([
-  {
-    name: 'Dashboard',
-    icon: 'LayoutDashboard',
-    path: '/'
-  },
-]);
+import { useUiStore } from '@/stores/ui';
+import { onClickOutside } from '@vueuse/core';
+const uiStore = useUiStore();
 
-const handleClickOutside = (event: MouseEvent) => {
-  if (menuRef.value && !menuRef.value.contains(event.target as Node)) {
-    menuIsActive.value = false;
-  }
+const menuRef = ref<HTMLElement | null>(null);
+
+const iconMap: Record<string, Component> = {
+  LayoutDashboard,
+  Signal,
 };
 
-// Lifecycle hooks to add/remove event listener
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-});
+const getIconComponent = (icon: string) => {
+  return iconMap[icon] || null;  // Devuelve el componente o null si no se encuentra
+};
 
-onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+onClickOutside(menuRef, () => {
+  uiStore.closeMenu();
 });
 </script>
 
 <style scoped>
 @media screen and (max-width: 1280px) {
+  .menu-wrapper {
+    transition: all .1s ease-in-out;
+  }
+
   .menu-active-wrapper {
     width: 100%;
     left: 0;
@@ -58,6 +53,7 @@ onUnmounted(() => {
     padding-top: 16px;
     padding-bottom: 0;
     backdrop-filter: blur(10px);
+    opacity: 100;
   }
 
   .menu-active {
