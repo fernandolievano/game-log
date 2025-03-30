@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-poppins: Poppins, sans-serif;
+  --color-gray-one: #696969;
+  --color-gray-two: #a9a9a9;
+  --color-gray-three: #c0c0c0;
+  --color-night: #1e1e1e;
+  --color-day: #f0edee;
+}
+
+html {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+@import './transitions.css';
+@import './layout.css';
