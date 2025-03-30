@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="page-class">
     <header class="px-4 py-2 flex flex-col items-center justify-center h-full">
       <h2 v-if="steamId" class="text-2xl mb-8">
         Track your game stats with Steam API!

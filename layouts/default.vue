@@ -2,13 +2,14 @@
   <Suspense>
     <template #default>
       <div v-if="!userStore.loading"
-        class="min-h-screen dark:bg-black dark:text-white bg-white text-black font-poppins p-4 pt-20 xl:p-8 transition-colors">
+        class="min-h-screen dark:bg-black dark:text-white bg-white text-black font-poppins p-4 pt-20 xl:p-8 xl:pt-24 transition-colors">
         <NuxtLoadingIndicator />
         <!-- navbar -->
         <AppBar />
         <!-- navbar -->
 
         <!-- aside -->
+        <AppMenu />
         <!-- aside -->
 
         <!-- content -->
@@ -28,6 +29,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 import AppBar from '@/components/layout/AppBar.vue';
+import AppMenu from '@/components/layout/AppMenu.vue';
 
 useHead({
   title: 'GameLog',
