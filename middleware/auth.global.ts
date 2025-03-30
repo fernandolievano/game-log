@@ -10,6 +10,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const userStore = useUserStore();
   const steamStore = useSteamStore();
 
+  /**
+   * Reset user store to prevent unexpected behavior
+   */
+  userStore.$reset();
+
   /** OAuth login validations
    * - Check if access_token and refresh token are in the url (on a hash)
    * - If they exists, save them into cookies as well as user data.
@@ -62,8 +67,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   if (isAuthenticated && to.path === '/logout') {
     console.log('👋 User authenticated, logging out...');
-    await userStore.logout();
-    return navigateTo('/login', { replace: true });
+    userStore.logout();
   }
   if (isAuthenticated && !!steamidCookie.value) {
     console.log('🎮 Getting Steam data...');
