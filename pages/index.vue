@@ -21,7 +21,8 @@ import IconSteam from '@/components/svg/IconSteam.vue';
 import DashboardGames from '@/components/dashboard/DashboardGames.vue';
 
 const steamId = useCookie('steamid');
+const config = useRuntimeConfig();
 const connectWithSteam = () => {
-  window.location.href = "http://localhost:3000/api/auth/steam";
+  window.location.href = `${config.app.domain}/api/auth/steam`;
 };
 </script>

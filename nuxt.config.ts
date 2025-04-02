@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     }
   },
   runtimeConfig: {
+    app: {
+      domain: process.env.DOMAIN
+    },
     public: {
       supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,
       supabaseKey: process.env.NUXT_PUBLIC_SUPABASE_KEY
