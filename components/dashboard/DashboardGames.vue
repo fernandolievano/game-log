@@ -1,6 +1,10 @@
 <template>
-  <section class="w-full container mx-auto py-4 md:py-8 px-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-start gap-4">
+  <section class="w-full container mx-auto pb-4 md:pb-8 px-4">
+    <article class="w-full pb-16">
+      <DashboardGamesHeader />
+    </article>
+
+    <article class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-start gap-4">
       <template v-if="loading">
         <DashboardGamesSkeleton v-for="i in 20" :key="i" :style="`animation-delay: ${i * 0.1}s`" />
       </template>
@@ -9,7 +13,7 @@
           :image="`https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`" :name="game.name"
           :playtime="game.playtime_forever" :key="game.appid" />
       </template>
-    </div>
+    </article>
   </section>
 </template>
 
@@ -19,7 +23,5 @@ import DashboardGamesSkeleton from '@/components/dashboard/DashboardGamesSkeleto
 import { useSteamStore } from '@/stores/steam';
 
 const steamStore = useSteamStore();
-const message = ref('Games not loaded yet!');
-const noGamesFound = computed(() => steamStore.games.length <= 1);
 const loading = computed(() => steamStore.gameLoading);
 </script>

@@ -1,10 +1,7 @@
 <template>
   <main class="page-class">
-    <header class="px-4 py-2 flex flex-col items-center justify-center h-full">
-      <h2 v-if="steamId" class="text-2xl mb-8">
-        Track your game stats with Steam API!
-      </h2>
-      <AppButton v-if="!steamId" @click="connectWithSteam" class="uppercase max-w-[400px] mx-auto">
+    <header v-if="!steamId" class="px-4 py-2 flex flex-col items-center justify-center h-full">
+      <AppButton @click="connectWithSteam" class="uppercase max-w-[400px] mx-auto">
         <span class="flex items-center justify-center gap-2 text-xs md:text-base">
           Connect with Steam
           <IconSteam class="w-6" />
