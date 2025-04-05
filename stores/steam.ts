@@ -19,5 +19,15 @@ export const useSteamStore = defineStore('steam', {
       this.game_count = game_count;
       this.gameLoading = false;
     }
+  },
+  getters: {
+    mostPlayedGame: (state) => {
+      if (state.games.length > 0) {
+        return state.games.reduce((prev, current) => {
+          return prev.playtime_forever > current.playtime_forever ? prev : current;
+        });
+      }
+      return null;
+    }
   }
 });

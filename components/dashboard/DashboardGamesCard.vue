@@ -41,8 +41,11 @@ const imageHasError = ref(false);
 const imageAlt = computed(() => {
   return imageHasError ? 'No photo icons created by Wyasa.Design - Flaticon' : `${props.name} Cover`;
 });
-const setDefaultImage = (e) => {
+const setDefaultImage = (e: Event) => {
   imageHasError.value = true;
-  e.target.src = '/no-photo.png';
+  const target = e.target as HTMLImageElement;
+  if (target) {
+    target.src = '/no-photo.png';
+  }
 };
 </script>

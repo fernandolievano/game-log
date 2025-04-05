@@ -1,7 +1,9 @@
 <template>
   <section class="w-full container mx-auto pb-4 md:pb-8 px-4">
-    <article class="w-full pb-16">
-      <DashboardGamesHeader />
+    <article class="w-full pb-16" v-if="steamStore.mostPlayedGame">
+      <DashboardGamesHeader
+        :image="`https://cdn.akamai.steamstatic.com/steam/apps/${steamStore.mostPlayedGame.appid}/header.jpg`"
+        :name="steamStore.mostPlayedGame.name" :playtime="steamStore.mostPlayedGame.playtime_forever" />
     </article>
 
     <article class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-start gap-4">
