@@ -1,15 +1,18 @@
 <template>
-  <div class="w-full max-w-[400px] mx-auto flex flex-col justify-start">
-    <div class="relative aspect-[16/9] overflow-hidden flex items-center">
-      <img class="object-center rounded-2xl"
-        :class="[imageHasError ? 'object-contain p-4 w-[50%] h-full mx-auto' : 'w-full h-auto object-cover border border-day dark:border-night']"
+  <div
+    class="w-full max-w-[400px] mx-auto grid grid-cols-1 grid-rows-[2fr_auto] md:grid-rows-[2fr_60px] gap-0 items-start h-full"
+    :title="name">
+    <div class="relative overflow-hidden flex items-start h-fit">
+      <img class="object-top rounded-2xl"
+        :class="[imageHasError ? 'object-contain p-4 w-[50%] h-full max-h-[155px] mx-auto' : 'w-full h-auto object-cover border border-day dark:border-night']"
         :src="image" :alt="imageAlt" @error="setDefaultImage" loading="lazy">
     </div>
 
-    <div class="px-2 py-2 w-full flex justify-between items-start gap-4">
-      <h3 class="text-sm font-semibold font-poppins tracking-wider max-w-[80%]">{{ name }}</h3>
+    <div
+      class="px-2 py-2 md:pl-4 w-full h-full flex justify-between items-start gap-4 bg-gradient-to-b from-white to-day dark:from-black dark:to-night rounded-b-2xl shadow-lg shadow-gray-300 dark:shadow-zinc-900">
+      <h3 class="text-sm font-semibold font-poppins tracking-wider max-w-[80%] line-clamp-2">{{ name }}</h3>
       <span
-        class="bg-purple-500 dark:bg-pink-700 text-white px-2 py-1 rounded-2xl text-xs font-sans flex-nowrap text-nowrap">
+        class="bg-gradient-to-tr from-purple-500 to-pink-600 text-white px-2 py-1 rounded-2xl text-xs font-sans flex-nowrap text-nowrap">
         {{ hoursPlayed }} hours
       </span>
     </div>
