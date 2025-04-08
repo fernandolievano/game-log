@@ -1,33 +1,25 @@
 <template>
-  <Suspense>
-    <template #default>
-      <div v-if="!userStore.loading"
-        class="min-h-screen dark:bg-black dark:text-white bg-white text-black font-poppins p-4 pt-20 xl:p-8 xl:pt-20 transition-colors">
-        <NuxtLoadingIndicator />
-        <!-- navbar -->
-        <AppBar />
-        <!-- navbar -->
+  <div
+    class="min-h-screen dark:bg-black dark:text-white bg-white text-black font-poppins p-4 pt-20 xl:p-8 xl:pt-20 transition-colors">
+    <NuxtLoadingIndicator />
+    <!-- navbar -->
+    <AppBar />
+    <!-- navbar -->
 
-        <!-- aside -->
-        <AppMenu />
-        <!-- aside -->
+    <!-- aside -->
+    <AppMenu />
+    <!-- aside -->
 
-        <!-- content -->
-        <NuxtPage />
-        <!-- content -->
-      </div>
-    </template>
-
-    <template #fallback>
-      <div class="h-full flex justify-center items-center w-full">
-        <AppLoading />
-      </div>
-    </template>
-  </Suspense>
+    <!-- content -->
+    <NuxtPage />
+    <!-- content -->
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
+import { useSteamStore } from '@/stores/steam';
+import { useSteamService } from '@/services/steam';
 import AppBar from '@/components/layout/AppBar.vue';
 import AppMenu from '@/components/layout/AppMenu.vue';
 
@@ -46,5 +38,31 @@ useHead({
     }
   ]
 });
+
 const userStore = useUserStore();
+const steamStore = useSteamStore();
+const steamService = useSteamService();
+
+const { status, data } = useAsyncData('steam', async () => {
+  console.log('🎮 Getting Steam data...');
+  const steamidCookie = useCookie('steamid');
+
+  if (steamidCookie.value) {
+    const { data: summaryData } = await steamService.fetchPlayerSummary();
+    if (summaryData) {
+      steamStore.setPlayerSummary(summaryData.players[0]);
+    }
+  }
+  if (steamidCookie.value && steamStore.games.length === 0) {
+    const { data: gamesData } = await steamService.fetchOwnedGames();
+    if (gamesData) {
+      steamStore.setOwnedGames(gamesData.games, gamesData.game_count);
+    }
+  }
+
+  return {
+    games: steamStore.games,
+    player: steamStore.player
+  };
+});
 </script>

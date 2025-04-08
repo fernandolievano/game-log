@@ -1,10 +1,11 @@
-import { defineNuxtRouteMiddleware, } from '#app';
+import { defineNuxtRouteMiddleware, useNuxtApp } from '#app';
 import { useAuthService } from '@/services/auth';
 import { useSteamService } from '@/services/steam';
 import { useUserStore } from '@/stores/user';
 import { useSteamStore } from '@/stores/steam';
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  const { ssrContext } = useNuxtApp();
   const authService = useAuthService();
   const steamService = useSteamService();
   const userStore = useUserStore();
@@ -13,7 +14,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   /**
    * Reset user store to prevent unexpected behavior
    */
-  userStore.$reset();
+  if (ssrContext) {
+    console.log('🧹 Resetting user store...');
+    userStore.$reset();
+  }
 
   /** OAuth login validations
    * - Check if access_token and refresh token are in the url (on a hash)
@@ -65,22 +69,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const isAuthenticated = !!userStore.user;
   const isAuthRoute = to.path.startsWith('/login') || to.path.startsWith('/register');
 
-  if (isAuthenticated && to.path === '/logout') {
-    console.log('👋 User authenticated, logging out...');
-    userStore.logout();
-  }
-  if (isAuthenticated && !!steamidCookie.value) {
-    console.log('🎮 Getting Steam data...');
-    const { data: summaryData } = await steamService.fetchPlayerSummary();
-    const { data: gamesData } = await steamService.fetchOwnedGames();
-
-    if (summaryData) {
-      steamStore.setPlayerSummary(summaryData.players[0]);
-    }
-    if (gamesData) {
-      steamStore.setOwnedGames(gamesData.games, gamesData.game_count);
-    }
-  }
+  // if (isAuthenticated && to.path === '/logout') {
+  //   console.log('👋 User authenticated, logging out...');
+  //   userStore.logout();
+  //   return navigateTo('/login', { replace: true });
+  // }
   if (!isAuthenticated && !isAuthRoute) {
     console.log('🔒 User not authenticated, redirecting to login...');
     return navigateTo('/login', { replace: true });
