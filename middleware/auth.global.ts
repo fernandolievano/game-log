@@ -14,10 +14,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   /**
    * Reset user store to prevent unexpected behavior
    */
-  if (ssrContext) {
-    console.log('🧹 Resetting user store...');
-    userStore.$reset();
-  }
+  console.log('🧹 Resetting user store...');
+  userStore.$reset();
 
   /** OAuth login validations
    * - Check if access_token and refresh token are in the url (on a hash)
@@ -69,11 +67,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const isAuthenticated = !!userStore.user;
   const isAuthRoute = to.path.startsWith('/login') || to.path.startsWith('/register');
 
-  // if (isAuthenticated && to.path === '/logout') {
-  //   console.log('👋 User authenticated, logging out...');
-  //   userStore.logout();
-  //   return navigateTo('/login', { replace: true });
-  // }
+  if (isAuthenticated && to.path === '/logout') {
+    console.log('👋 User authenticated, logging out...');
+    await userStore.logout();
+    return navigateTo('/login', { replace: true });
+  }
   if (!isAuthenticated && !isAuthRoute) {
     console.log('🔒 User not authenticated, redirecting to login...');
     return navigateTo('/login', { replace: true });
