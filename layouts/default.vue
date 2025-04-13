@@ -17,8 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSteamStore } from '@/stores/steam';
-import { useSteamService } from '@/services/steam';
 import AppBar from '@/components/layout/AppBar.vue';
 import AppMenu from '@/components/layout/AppMenu.vue';
 
@@ -36,32 +34,5 @@ useHead({
       })()`
     }
   ]
-});
-
-const steamStore = useSteamStore();
-const steamService = useSteamService();
-
-const { status, data } = useAsyncData('steam', async () => {
-  const steamidCookie = useCookie('steamid');
-
-  if (steamidCookie.value) {
-    console.log('🎮 Getting Steam player data...');
-    const { data: summaryData } = await steamService.fetchPlayerSummary();
-    if (summaryData) {
-      steamStore.setPlayerSummary(summaryData.players[0]);
-    }
-  }
-  if (steamidCookie.value && steamStore.games.length === 0) {
-    console.log('🎮 Getting Steam games data...');
-    const { data: gamesData } = await steamService.fetchOwnedGames();
-    if (gamesData) {
-      steamStore.setOwnedGames(gamesData.games, gamesData.game_count);
-    }
-  }
-
-  return {
-    games: steamStore.games,
-    player: steamStore.player
-  };
 });
 </script>

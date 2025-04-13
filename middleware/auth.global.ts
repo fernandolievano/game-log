@@ -11,12 +11,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const userStore = useUserStore();
   const steamStore = useSteamStore();
 
-  /**
-   * Reset user store to prevent unexpected behavior
-   */
-  console.log('🧹 Resetting user store...');
-  userStore.$reset();
-
   /** OAuth login validations
    * - Check if access_token and refresh token are in the url (on a hash)
    * - If they exists, save them into cookies as well as user data.
@@ -71,6 +65,22 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     console.log('👋 User authenticated, logging out...');
     await userStore.logout();
     return navigateTo('/login', { replace: true });
+  }
+  if (isAuthenticated && steamidCookie.value) {
+    if (ssrContext) {
+      console.log('🎮 Getting Steam data server side...');
+    } else {
+      console.log('🎮 Getting Steam data client side...');
+    }
+    const { data: summaryData } = await steamService.fetchPlayerSummary();
+    const { data: gamesData } = await steamService.fetchOwnedGames();
+
+    if (summaryData) {
+      steamStore.setPlayerSummary(summaryData.players[0]);
+    }
+    if (gamesData) {
+      steamStore.setOwnedGames(gamesData.games, gamesData.game_count);
+    }
   }
   if (!isAuthenticated && !isAuthRoute) {
     console.log('🔒 User not authenticated, redirecting to login...');
