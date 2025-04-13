@@ -42,13 +42,11 @@ const props = defineProps({
 const hoursPlayed = computed(() => Math.round(props.playtime / 60));
 const imageHasError = ref(false);
 const imageAlt = computed(() => {
-  return imageHasError ? 'No photo icons created by Wyasa.Design - Flaticon' : `${props.name} Cover`;
+  return imageHasError ? 'Image not Found' : `${props.name} Cover`;
 });
 const setDefaultImage = (e: Event) => {
   imageHasError.value = true;
   const target = e.target as HTMLImageElement;
-  if (target) {
-    target.src = '/no-photo.png';
-  }
+  target.src = '/no-photo.png';
 };
 </script>
