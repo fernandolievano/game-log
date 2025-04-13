@@ -15,8 +15,16 @@ export const useSteamStore = defineStore('steam', {
       this.playerLoading = false;
     },
     setOwnedGames(games: SteamGame[], game_count: number) {
-      this.games = games;
-      this.game_count = game_count;
+      // Filter out test and benchmark games
+      this.games = games.filter((game) => {
+        const name = game.name.toLowerCase();
+        if (name.includes('test') || name.includes('benchmark')) {
+          return false;
+        }
+        return true;
+      });
+
+      this.game_count = this.games.length;
       this.gameLoading = false;
     }
   },
