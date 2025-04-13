@@ -1,6 +1,6 @@
 <template>
-  <header
-    class="w-full rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 shadow-pink-600/50 shadow-xl flex flex-col items-start justify-start md:flex-row-reverse md:items-center">
+  <nuxt-link :to="`/games/${appid}`"
+    class="w-full rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 shadow-pink-600/50 shadow-xl flex flex-col items-start justify-start md:flex-row-reverse md:items-center cursor-pointer transition-all ease-linear">
     <div class="relative w-full h-fit max-w-[700px]">
       <img :src="image" :alt="imageAlt" @error="setDefaultImage" loading="eager"
         :class="[imageHasError ? 'object-contain p-4 w-auto h-full max-h-[128px] mx-auto' : 'w-full md:h-h-full object-cover object-center saturate-[70%] rounded-2xl z-0 transition-all duration-300 ease-in-out md:rounded-l-none']"
@@ -16,11 +16,15 @@
           class="text-3xl xl:text-4xl">{{ hoursPlayed }} hours</strong> of playtime.
       </h1>
     </div>
-  </header>
+  </nuxt-link>
 </template>
 
 <script lang="ts" setup>
 const props = defineProps({
+  appid: {
+    type: Number,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
