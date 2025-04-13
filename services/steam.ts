@@ -16,10 +16,12 @@ interface SteamOwnedGamesResponse {
 }
 
 export const useSteamService = () => {
-  const fetchPlayerSummary = async () => {
+  const fetchPlayerSummary = async (steamid: string) => {
     try {
       const { data, error, ok } = await $fetch<SteamSummaryResponse>('/api/steam/summary', {
-        credentials: 'include'
+        headers: {
+          'x-steamid': steamid
+        }
       });
 
       if (error) throw new Error(error);
@@ -46,10 +48,12 @@ export const useSteamService = () => {
       };
     }
   };
-  const fetchOwnedGames = async () => {
+  const fetchOwnedGames = async (steamid: string) => {
     try {
       const { data, error, ok } = await $fetch<SteamOwnedGamesResponse>('/api/steam/games', {
-        credentials: 'include'
+        headers: {
+          'x-steamid': steamid
+        }
       });
 
       if (error) throw new Error(error);

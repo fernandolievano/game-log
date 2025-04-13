@@ -1,15 +1,9 @@
-import { defineNuxtRouteMiddleware, useNuxtApp } from '#app';
 import { useAuthService } from '@/services/auth';
-import { useSteamService } from '@/services/steam';
 import { useUserStore } from '@/stores/user';
-import { useSteamStore } from '@/stores/steam';
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const { ssrContext } = useNuxtApp();
   const authService = useAuthService();
-  const steamService = useSteamService();
   const userStore = useUserStore();
-  const steamStore = useSteamStore();
 
   /** OAuth login validations
    * - Check if access_token and refresh token are in the url (on a hash)
@@ -27,7 +21,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   const userCookie = useCookie('user');
   const accessTokenCookie = useCookie('access_token');
-  const steamidCookie = useCookie('steamid');
 
   /** Populate store as soon as possible
    * - If user cookie exists, populate store with it
@@ -65,22 +58,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     console.log('👋 User authenticated, logging out...');
     await userStore.logout();
     return navigateTo('/login', { replace: true });
-  }
-  if (isAuthenticated && steamidCookie.value) {
-    if (ssrContext) {
-      console.log('🎮 Getting Steam data server side...');
-    } else {
-      console.log('🎮 Getting Steam data client side...');
-    }
-    const { data: summaryData } = await steamService.fetchPlayerSummary();
-    const { data: gamesData } = await steamService.fetchOwnedGames();
-
-    if (summaryData) {
-      steamStore.setPlayerSummary(summaryData.players[0]);
-    }
-    if (gamesData) {
-      steamStore.setOwnedGames(gamesData.games, gamesData.game_count);
-    }
   }
   if (!isAuthenticated && !isAuthRoute) {
     console.log('🔒 User not authenticated, redirecting to login...');

@@ -6,6 +6,9 @@ export default defineEventHandler(async (event) => {
   const accessTokenCookie = getCookie(event, 'access_token') || undefined;
   const supabase = useSupabase();
 
+  const cookies = parseCookies(event);
+  console.log('ALL COOKIES user:', cookies); // <--
+
   try {
     const { data, error } = await supabase.auth.getUser(accessTokenCookie);
 
@@ -30,6 +33,7 @@ export default defineEventHandler(async (event) => {
 
     return { ok: true, data, error: null };
   } catch (err) {
+    console.error('❌ error while getting user from supabase: ', err);
     if (err instanceof Error) {
       return {
         ok: false,
