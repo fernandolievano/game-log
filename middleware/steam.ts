@@ -9,11 +9,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   if (steamidCookie.value) {
     if (ssrContext) {
-      console.log('🍪 Steam cookie server side: ', steamidCookie.value);
-      console.log('🎮 Getting Steam data server side...');
+      console.info('🎮 Getting Steam data server side...');
     } else {
-      console.log('🍪 Steam cookie client side: ', steamidCookie.value);
-      console.log('🎮 Getting Steam data client side...');
+      console.info('🎮 Getting Steam data client side...');
     }
     const { data: summaryData } = await steamService.fetchPlayerSummary(steamidCookie.value);
     const { data: gamesData } = await steamService.fetchOwnedGames(steamidCookie.value);

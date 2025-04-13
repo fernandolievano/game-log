@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
     }
 
     if (data.session) {
-      console.log('Setting session at backend.');
       const cookieOptions = {
         httpOnly: true,
         maxAge: data.session.expires_in,

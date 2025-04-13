@@ -23,7 +23,6 @@ export default defineEventHandler(async (event) => {
       secure: isProduction,
       sameSite: 'lax',
     });
-    console.log('🎮 --> SteamID:', steamId);
   }
 
   return sendRedirect(event, '/'); // ← steamid cookie is now set correctly

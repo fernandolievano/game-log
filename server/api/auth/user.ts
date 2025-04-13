@@ -6,9 +6,6 @@ export default defineEventHandler(async (event) => {
   const accessTokenCookie = getCookie(event, 'access_token') || undefined;
   const supabase = useSupabase();
 
-  const cookies = parseCookies(event);
-  console.log('ALL COOKIES user:', cookies); // <--
-
   try {
     const { data, error } = await supabase.auth.getUser(accessTokenCookie);
 
@@ -17,8 +14,6 @@ export default defineEventHandler(async (event) => {
       throw new Error(error.message);
     }
 
-    console.log('successful log: ', data);
-
     const cookieOptions = {
       httpOnly: true,
       path: '/',
@@ -26,7 +21,6 @@ export default defineEventHandler(async (event) => {
     };
 
     if (data.user) {
-      console.log('save user on cookiesssss!');
       const userJSON = JSON.stringify(data.user);
       setCookie(event, 'user', userJSON, cookieOptions);
     }

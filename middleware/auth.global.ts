@@ -11,9 +11,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    */
   if (to.hash) {
     const { data, message } = await authService.setSession(to.hash);
-
-    console.log('ℹ️  hash validation:', message);
-
     if (data) {
       userStore.setUser(data.user);
     }
@@ -32,15 +29,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       ? JSON.parse(userCookie.value) // If the cookie is a string, parse it into an object
       : userCookie.value; // If it's already an object, no need to parse
 
-    console.log('ℹ️ got user from cookies');
-
     userStore.setUser(parsedUser);
 
   } else if (accessTokenCookie.value && !userStore.user) {
 
     const { data, message } = await authService.fetchUser();
 
-    console.log('ℹ️ populating store', message);
+    console.info('Populating store: ', message);
 
     if (data) {
       userStore.setUser(data.user);
@@ -55,16 +50,16 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const isAuthRoute = to.path.startsWith('/login') || to.path.startsWith('/register');
 
   if (isAuthenticated && to.path === '/logout') {
-    console.log('👋 User authenticated, logging out...');
+    console.info('👋 User authenticated, logging out...');
     await userStore.logout();
     return navigateTo('/login', { replace: true });
   }
   if (!isAuthenticated && !isAuthRoute) {
-    console.log('🔒 User not authenticated, redirecting to login...');
+    console.info('🔒 User not authenticated, redirecting to login...');
     return navigateTo('/login', { replace: true });
   }
   if (isAuthenticated && isAuthRoute) {
-    console.log('🔓 User authenticated, redirecting to home...');
+    console.info('🔓 User authenticated, redirecting to home...');
     return navigateTo('/', { replace: true });
   };
 });
