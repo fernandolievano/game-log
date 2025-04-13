@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     app: {
       domain: process.env.DOMAIN,
       env: process.env.NODE_ENV,
+      steam_key: process.env.STEAM_KEY
     },
     public: {
       supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,
