@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const steamStore = useSteamStore();
   const steamidCookie = useCookie('steamid');
 
-  if (steamidCookie.value) {
+  if (steamidCookie.value && steamStore.playerLoading && steamStore.gameLoading) {
     if (ssrContext) {
       console.info('🎮 Getting Steam data server side...');
     } else {
