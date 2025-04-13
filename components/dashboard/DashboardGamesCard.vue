@@ -4,7 +4,7 @@
     :title="name">
     <div class="relative overflow-hidden flex items-start h-fit">
       <img class="object-top rounded-2xl"
-        :class="[imageHasError ? 'object-contain p-4 w-[50%] h-full max-h-[155px] mx-auto' : 'w-full h-auto object-cover border border-day dark:border-night']"
+        :class="[imageHasError ? 'object-contain p-4 w-[50%] h-full max-h-[155px] mx-auto' : 'w-full h-auto object-cover border-t border-day dark:border-night']"
         :src="image" :alt="imageAlt" @error="setDefaultImage" loading="lazy">
     </div>
 
