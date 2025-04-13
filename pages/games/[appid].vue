@@ -1,18 +1,27 @@
 <template>
   <main class="page-class">
-    <template v-if="game">
+    <template v-if="game && gameStats">
       <div
         class="relative px-4 py-4 xl:py-8 xl:px-8 shadow shadow-[#1b2838] border-2 border-[#1b2838] bg-[#1b2838] rounded-2xl">
         <img :src="game.background" class="absolute z-0 w-full h-full inset-0 object-cover rounded-2xl">
 
-        <GameHeader :game="game" />
+        <GameHeader :game="game" :game-stats="gameStats" />
       </div>
     </template>
-    <template></template>
+    <template>
+      <div class="h-full py-4 px-4 w-full">
+        <h2 class="text-center text-2xl text-white">
+          You don't own this game or it doesn't exists.
+        </h2>
+      </div>
+    </template>
   </main>
 </template>
 
 <script setup lang="ts">
+import { useSteamStore } from '@/stores/steam';
+
+const steamStore = useSteamStore();
 const route = useRoute();
 const { appid } = route.params;
 const { data, status } = await useFetch('/api/steam/game', {
@@ -27,4 +36,7 @@ const game = computed(() => {
 
   return null;
 });
+const gameStats = typeof appid === 'string' && steamStore.selectedGame
+  ? steamStore.selectedGame(parseInt(appid))
+  : null;
 </script>

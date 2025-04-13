@@ -36,6 +36,19 @@ export const useSteamStore = defineStore('steam', {
         });
       }
       return null;
+    },
+    selectedGame: (state) => {
+      if (state.games.length > 0) {
+        return (appid: number) => {
+          const game = state.games.find((game) => game.appid === appid);
+          if (game) {
+            return game;
+          }
+          return null;
+        };
+      }
+
+      return null;
     }
   }
 });
