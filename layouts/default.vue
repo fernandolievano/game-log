@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen dark:bg-black dark:text-white bg-white text-black font-poppins p-4 pt-20 xl:p-8 xl:pt-20 transition-colors w-full max-w-[2314px] mx-auto">
+    class="min-h-screen dark:bg-black dark:text-white bg-white text-black font-poppins p-4 pt-20 xl:p-8 xl:pt-20 transition-colors">
     <NuxtLoadingIndicator />
     <!-- navbar -->
     <AppBar />
@@ -11,7 +11,9 @@
     <!-- aside -->
 
     <!-- content -->
-    <NuxtPage />
+    <div class="w-full max-w-[2314px] mx-auto">
+      <NuxtPage />
+    </div>
     <!-- content -->
   </div>
 </template>
