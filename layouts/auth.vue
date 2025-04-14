@@ -1,5 +1,5 @@
 <template>
-  <main class="w-full p-0 m-0 dark:bg-black dark:text-white bg-white text-black font-poppins">
+  <main class="w-full p-0 m-0 dark:bg-black dark:text-white bg-white text-black font-poppins max-w-[3200px] mx-auto">
     <NuxtLoadingIndicator />
     <div class="flex min-h-screen h-fit items-stretch justify-between p-8 gap-4 xl:gap-8">
       <div class="w-full h-fit lg:max-w-[600px] xl:max-w-[800px] my-auto">
