@@ -4,8 +4,8 @@
     <img :src="game.header_image" :alt="game.name" class="mx-auto object-cover rounded-2xl">
 
     <div
-      class="w-full min-h-full max-w-[450px] lg:max-w-full text-white lg:px-8 flex flex-col items-start justify-start gap-4 overflow-auto">
-      <h3 class="pt-4 lg:pt-0 text-center font-bold tracking-wider text-3xl lg:text-left lg:text-4xl">
+      class="w-full min-h-full max-w-[450px] lg:max-w-full text-white px-1 lg:px-8 flex flex-col items-start justify-start gap-4 overflow-auto">
+      <h3 class="pt-4 lg:pt-0 font-bold tracking-wider text-3xl text-left lg:text-4xl">
         {{ game.name }}
       </h3>
 
