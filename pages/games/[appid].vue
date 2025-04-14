@@ -9,7 +9,7 @@
         <GameDetails :game="game" :game-stats="gameStats" />
       </div>
     </template>
-    <template>
+    <template v-else>
       <div class="h-full py-4 px-4 w-full">
         <h2 class="text-center text-2xl text-white">
           You don't own this game or it doesn't exists.
@@ -23,6 +23,10 @@
 import { useSteamStore } from '@/stores/steam';
 import GameHeader from '@/components/game/GameHeader.vue';
 import GameDetails from '@/components/game/GameDetails.vue';
+
+definePageMeta({
+  middleware: ['steam']
+});
 
 const steamStore = useSteamStore();
 const route = useRoute();
