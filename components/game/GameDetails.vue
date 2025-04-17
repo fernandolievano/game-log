@@ -41,9 +41,26 @@
       </p>
     </section>
     <!--  -->
-    <section class="w-full py-4"></section>
+    <section class="w-full py-4">
+      <div class="text-xl lg:text-2xl tracking-wider font-bold">Categories</div>
+      <div class="flex gap-2 items-center text-gray-two pt-4 flex-wrap">
+        <span v-for="category in game.categories"
+          class="text-xs py-1 px-2 bg-[#1b2838] rounded-full cursor-default text-nowrap" :key="category.id">
+          {{ category.description }}
+        </span>
+      </div>
+    </section>
     <!--  -->
-    <section class="w-full py-4"></section>
+    <section class="w-full py-4" v-if="game.genres.length > 3">
+      <div class="text-xl lg:text-2xl tracking-wider font-bold">All Genres</div>
+
+      <div class="flex gap-2 items-center text-gray-two pt-4 flex-wrap">
+        <span v-for="genre in game.genres"
+          class="text-xs py-1 px-2 bg-[#1b2838] rounded-full cursor-default text-nowrap" :key="genre.id">
+          {{ genre.description }}
+        </span>
+      </div>
+    </section>
     <!--  -->
   </article>
 </template>
