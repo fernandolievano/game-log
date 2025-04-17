@@ -4,7 +4,7 @@
     <img :src="game.header_image" :alt="game.name" class="mx-auto object-cover rounded-2xl">
 
     <div
-      class="w-full min-h-full max-w-[450px] lg:max-w-full text-white px-1 lg:px-8 mt-4 lg:mt-0 flex flex-col items-start justify-start gap-4 overflow-auto bg-transparent backdrop-blur-md rounded-2xl">
+      class="w-full min-h-full max-w-[450px] lg:max-w-full text-white px-1 lg:px-8 mt-4 lg:mt-0 flex flex-col items-start justify-start gap-4 overflow-auto">
       <h3 class="pt-4 lg:pt-0 font-bold tracking-wider text-3xl text-left lg:text-4xl">
         {{ game.name }}
       </h3>
@@ -13,7 +13,7 @@
         {{ game.short_description }}
       </p>
 
-      <div class="w-full flex gap-4 justify-start items-end mt-auto px-4 py-4 mb-0">
+      <div class="w-full flex gap-4 justify-start items-end mt-auto py-4 mb-0">
         <div class="flex flex-col items-start gap-1 pr-2">
           <span class="text-xs text-gray-two">Release Date</span>
           <span class="text-sm font-semibold flex items-center gap-1">

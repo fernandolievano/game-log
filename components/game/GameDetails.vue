@@ -1,6 +1,6 @@
 <template>
   <article
-    class="w-full text-white z-10 relative mt-8 py-4 px-1 xl:py-8 grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-[450px] lg:max-w-full mx-auto bg-transparent backdrop-blur-md rounded-2xl">
+    class="w-full text-white z-10 relative mt-8 py-4 px-1 xl:py-8 grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-[450px] lg:max-w-full mx-auto">
     <!--  -->
     <section class="w-full py-4">
       <h4 class="text-xl lg:text-2xl tracking-wider font-bold">Available on</h4>
@@ -37,7 +37,7 @@
     <!--  -->
     <section class="w-full py-4">
       <h4 class="text-xl lg:text-2xl tracking-wider font-bold">Supported Languages</h4>
-      <p class="w-full pt-4 text-gray-two" v-html="game.supported_languages">
+      <p class="w-full pt-4 text-gray-two text-sm" v-html="game.supported_languages">
       </p>
     </section>
     <!--  -->
