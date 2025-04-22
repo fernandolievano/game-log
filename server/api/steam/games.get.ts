@@ -3,7 +3,7 @@ import type { SteamOwnedGamesResponse } from '~/interfaces/steam';
 
 export default defineEventHandler(async (event) => {
   const STEAM_KEY = process.env.STEAM_KEY || null;
-  const STEAM_ID = getCookie(event, 'steamid');
+  const STEAM_ID = getHeader(event, 'x-steamid');
 
   if (STEAM_KEY && STEAM_ID) {
     try {
@@ -24,7 +24,12 @@ export default defineEventHandler(async (event) => {
       };
     }
   } else {
-    console.error('❓ Missing API Key or Steam ID while getting player owned games');
+    if (!STEAM_KEY) {
+      console.error('❓ Missing API Key while getting player owned games');
+    }
+    if (!STEAM_ID) {
+      console.error('❓ Missing Steam ID while getting player owned games');
+    }
     return {
       ok: false,
       data: null,
