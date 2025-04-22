@@ -1,12 +1,10 @@
 <template>
   <div class="relative w-fit" v-if="player">
     <!-- user actions -->
-    <AppButtonBar class="w-fit flex items-center justify-start"
+    <AppButtonBar class="flex items-center justify-center !p-0"
       :class="[showPlayerWidget ? 'bg-day dark:bg-night' : 'bg-white dark:bg-black']" @click="handlePlayerWidget">
-      <img v-if="player" class="rounded-full" :src="player.avatar" alt="Steam Avatar" loading="lazy">
+      <img v-if="player" class="rounded-full w-12" :src="player.avatar" alt="Steam Avatar" loading="lazy">
       <AppLoading v-else />
-      <span v-if="player" class="text-center text-sm pl-2">{{ player.personaname }}</span>
-      <span v-else class="text-center text-sm pl-2"> Loading... </span>
     </AppButtonBar>
 
     <transition name="slide-fade" mode="out-in">

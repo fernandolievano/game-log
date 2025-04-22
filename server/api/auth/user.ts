@@ -14,8 +14,6 @@ export default defineEventHandler(async (event) => {
       throw new Error(error.message);
     }
 
-    console.log('successful log: ', data);
-
     const cookieOptions = {
       httpOnly: true,
       path: '/',
@@ -23,13 +21,13 @@ export default defineEventHandler(async (event) => {
     };
 
     if (data.user) {
-      console.log('save user on cookiesssss!');
       const userJSON = JSON.stringify(data.user);
       setCookie(event, 'user', userJSON, cookieOptions);
     }
 
     return { ok: true, data, error: null };
   } catch (err) {
+    console.error('❌ error while getting user from supabase: ', err);
     if (err instanceof Error) {
       return {
         ok: false,

@@ -1,9 +1,9 @@
 <template>
   <div
-    class="fixed h-full pr-4 -left-[200000px] top-20 z-50 pb-20 opacity-0 xl:opacity-100 xl:left-8 xl:w-[200px] menu-wrapper"
+    class="fixed h-full pr-8 -left-[200000px] top-20 z-50 pb-20 opacity-0 xl:opacity-100 xl:left-8 xl:w-[200px] xl:pr-4 menu-wrapper"
     :class="{ 'menu-active-wrapper': uiStore.menuIsActive }">
     <div ref="menuRef"
-      class="h-[calc(100%-16px)] w-full bg-gray-50 dark:bg-[#111111] border border-day dark:border-night rounded-2xl p-4 flex flex-col justify-start items-start gap-4 overflow-y-auto"
+      class="h-[calc(100%-16px)] w-full bg-gray-50 dark:bg-[#111111] border border-day dark:border-night rounded-2xl p-4 flex flex-col justify-start items-start gap-4 overflow-y-auto bg-gradient-to-br from-white to-day dark:from-black dark:to-night xl:shadow-lg shadow-gray-300 dark:shadow-zinc-900 transition-all duration-200 ease-in-out"
       :class="{ 'menu-active': uiStore.menuIsActive }">
       <NuxtLink v-for="link in uiStore.menuLinks" :key="link.path" :to="link.path"
         class="w-full py-3 px-4 text-center flex items-center justify-start gap-3 transition-all hover:bg-day dark:hover:bg-night rounded-xl cursor-pointer">

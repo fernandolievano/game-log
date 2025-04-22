@@ -1,7 +1,9 @@
 import { parse } from 'url';
+import { setCookie } from 'h3';
 
 export default defineEventHandler(async (event) => {
-  const isProduction = process.env.NODE_ENV === 'production';
+  const config = useRuntimeConfig();
+  const isProduction = config.app.env === 'production';
   const { query } = parse(getRequestURL(event).toString(), true);
 
   if (!query['openid.claimed_id']) {
@@ -12,18 +14,16 @@ export default defineEventHandler(async (event) => {
     ? query['openid.claimed_id'][0]
     : query['openid.claimed_id'];
 
-  const steamId = claimedId?.split('/').pop() ?? ''; // Asegura que nunca sea undefined
+  const steamId = claimedId?.split('/').pop() ?? '';
 
-  // Guardar en una cookie solo si el steamId no está vacío
   if (steamId) {
-    const cookieOptions = {
-      httpOnly: false,
+    setCookie(event, 'steamid', steamId, {
+      httpOnly: true,
       path: '/',
       secure: isProduction,
-    };
-    console.log('🎮 SteamID:', steamId);
-    setCookie(event, 'steamid', steamId, cookieOptions);
+      sameSite: 'lax',
+    });
   }
 
-  return sendRedirect(event, '/');
+  return sendRedirect(event, '/'); // ← steamid cookie is now set correctly
 });

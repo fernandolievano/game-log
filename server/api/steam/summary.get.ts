@@ -1,9 +1,9 @@
-import { getCookie } from 'h3';
+import { getCookie, getHeader } from 'h3';
 import type { SteamSummaryResponse } from '@/interfaces/steam';
 
 export default defineEventHandler(async (event) => {
   const STEAM_KEY = process.env.STEAM_KEY || null;
-  const STEAM_ID = getCookie(event, 'steamid');
+  const STEAM_ID = getHeader(event, 'x-steamid');
 
   if (STEAM_KEY && STEAM_ID) {
     try {
@@ -25,7 +25,12 @@ export default defineEventHandler(async (event) => {
       };
     }
   } else {
-    console.error('❓ Missing API Key or Steam ID while getting player summary');
+    if (!STEAM_KEY) {
+      console.error('❓ Missing API Key while getting player summary');
+    }
+    if (!STEAM_ID) {
+      console.error('❓ Missing Steam ID while getting player summary');
+    }
     return {
       ok: false,
       data: null,
