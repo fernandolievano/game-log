@@ -1,11 +1,10 @@
 <template>
   <main class="page-class">
     <template v-if="game && gameStats">
-      <div
-        class="relative px-4 py-4 xl:py-8 xl:px-8 shadow shadow-[#1b2838] border-2 border-[#1b2838] bg-[#1b2838] rounded-2xl">
+      <div class="relative shadow shadow-[#1b2838] border-2 border-[#1b2838] bg-[#1b2838] rounded-2xl">
         <img :src="game.background" class="absolute z-0 w-full h-full inset-0 object-cover rounded-2xl">
 
-        <div class="w-full h-full bg-transparent backdrop-blur-sm rounded-2xl">
+        <div class="w-full h-full bg-transparent backdrop-blur-sm rounded-2xl px-4 py-4 xl:py-8 xl:px-8">
           <GameHeader :game="game" :game-stats="gameStats" />
           <GameDetails :game="game" :game-stats="gameStats" />
         </div>
