@@ -24,7 +24,6 @@
 import { LogOut, LayoutDashboard, Signal } from 'lucide-vue-next';
 import { useUiStore } from '@/stores/ui';
 import { onClickOutside } from '@vueuse/core';
-import { onBeforeRouteLeave } from 'vue-router';
 
 const uiStore = useUiStore();
 

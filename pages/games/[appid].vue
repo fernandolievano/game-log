@@ -1,5 +1,10 @@
 <template>
   <main class="page-class">
+    <div class="flex xl:hidden justify-end">
+      <AppButton class="ml-auto max-w-fit" @click="goBack">
+        <ArrowLeft />
+      </AppButton>
+    </div>
     <template v-if="game && gameStats">
       <div class="relative shadow shadow-[#1b2838] border-2 border-[#1b2838] bg-[#1b2838] rounded-2xl">
         <img :src="game.background" class="absolute z-0 w-full h-full inset-0 object-cover rounded-2xl">
@@ -24,6 +29,7 @@
 import { useSteamStore } from '@/stores/steam';
 import GameHeader from '@/components/game/GameHeader.vue';
 import GameDetails from '@/components/game/GameDetails.vue';
+import { ArrowLeft } from 'lucide-vue-next';
 
 definePageMeta({
   middleware: ['steam']
@@ -50,4 +56,9 @@ const game = computed(() => {
 const gameStats = typeof appid === 'string' && steamStore.selectedGame
   ? steamStore.selectedGame(parseInt(appid))
   : null;
+
+const router = useRouter();
+const goBack = () => {
+  router.back();
+};
 </script>

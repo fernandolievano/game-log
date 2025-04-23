@@ -46,7 +46,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    * If user is logged in, fetch user's steam data
    * Redirect based on url path and user session
    */
-  const isAuthenticated = !!userStore.user;
+  const isAuthenticated = !!userCookie.value;
   const isAuthRoute = to.path.startsWith('/login') || to.path.startsWith('/register');
 
   if (isAuthenticated && to.path === '/logout') {
