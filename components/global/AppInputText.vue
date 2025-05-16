@@ -3,7 +3,8 @@
     <label :for="name" class="capitalize font-bold text-left w-full text-sm px-1 tracking-wide">
       {{ name }} <span v-if="required">*</span>
     </label>
-    <input v-model="model" type="text" :id="name" :name="name" class="w-full border rounded-lg py-3 px-5 tracking-wider"
+    <input v-model="model" type="text" :id="name" :name="name"
+      class="w-full border rounded-lg py-3 px-5 tracking-wider text-xs sm:text-sm h-[50px]"
       :class="[hasErrors ? 'border-pink-700' : 'border-current']" :placeholder="`Enter your ${name}`" required>
   </div>
   <p class="text-xs text-left px-1 text-pink-700 h-4 tracking-wide">
