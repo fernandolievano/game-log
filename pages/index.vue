@@ -18,9 +18,6 @@ import IconSteam from '@/components/svg/IconSteam.vue';
 import DashboardGames from '@/components/dashboard/DashboardGames.vue';
 import { useSteamStore } from '@/stores/steam';
 
-definePageMeta({
-  middleware: ['steam']
-});
 const steamStore = useSteamStore();
 const steamIsLoaded = computed(() => !steamStore.playerLoading && !steamStore.gameLoading);
 const config = useRuntimeConfig();

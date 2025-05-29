@@ -1,65 +1,88 @@
-import { useAuthService } from '@/services/auth';
+import { useSteamService } from '@/services/steam';
+import { useSteamStore } from '@/stores/steam';
 import { useUserStore } from '@/stores/user';
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
-  const authService = useAuthService();
-  const userStore = useUserStore();
+export default defineNuxtRouteMiddleware(
+	async (to, from) => {
+		const { ssrContext } = useNuxtApp();
+		const steamService = useSteamService();
+		const steamStore = useSteamStore();
+		const userStore = useUserStore();
+		const steamidCookie = useCookie('steamid');
 
-  /** OAuth login validations
-   * - Check if access_token and refresh token are in the url (on a hash)
-   * - If they exists, save them into cookies as well as user data.
-   */
-  if (to.hash) {
-    const { data, message } = await authService.setSession(to.hash);
-    if (data) {
-      userStore.setUser(data.user);
-    }
-  }
+		/**
+		 * Logout functionality
+		 * */
+		if (to.path === '/logout') {
+			console.info(
+				'👋 User authenticated, logging out...'
+			);
+			await userStore.logout();
+			return navigateTo('/login', { replace: true });
+		}
 
-  const userCookie = useCookie('user');
-  const accessTokenCookie = useCookie('access_token');
+		/**
+		 * Check if the user is authenticated by checking the steamid cookie
+		 */
+		if (
+			steamidCookie.value &&
+			steamStore.playerLoading &&
+			steamStore.gameLoading
+		) {
+			/**
+			 * Redirect if user is already authenticated and tries to
+			 * access the login page.
+			 */
+			if (to.path === '/login') {
+				return navigateTo('/', { replace: true });
+			}
 
-  /** Populate store as soon as possible
-   * - If user cookie exists, populate store with it
-   * - If not, fetch user data from backend
-   */
-  if (userCookie.value && !userStore.user) {
+			if (ssrContext) {
+				console.info(
+					'🎮 Getting Steam data server side...'
+				);
+			} else {
+				console.info(
+					'🎮 Getting Steam data client side...'
+				);
+			}
 
-    const parsedUser = typeof userCookie.value === 'string'
-      ? JSON.parse(userCookie.value) // If the cookie is a string, parse it into an object
-      : userCookie.value; // If it's already an object, no need to parse
+			const { data: summaryData } =
+				await steamService.fetchPlayerSummary(
+					steamidCookie.value
+				);
+			const { data: gamesData } =
+				await steamService.fetchOwnedGames(
+					steamidCookie.value
+				);
 
-    userStore.setUser(parsedUser);
+			if (summaryData) {
+				steamStore.setPlayerSummary(
+					summaryData.players[0]
+				);
+			}
+			if (gamesData) {
+				steamStore.setOwnedGames(
+					gamesData.games,
+					gamesData.game_count
+				);
+			}
+		} else {
+			console.info(
+				'🔒 User not authenticated, redirecting to login...'
+			);
+			/**
+			 * Redirect to /login if steamid cookie is not available
+			 */
 
-  } else if (accessTokenCookie.value && !userStore.user) {
-
-    const { data, message } = await authService.fetchUser();
-
-    console.info('Populating store: ', message);
-
-    if (data) {
-      userStore.setUser(data.user);
-    }
-  }
-
-  /** Validations
-   * If user is logged in, fetch user's steam data
-   * Redirect based on url path and user session
-   */
-  const isAuthenticated = !!userCookie.value;
-  const isAuthRoute = to.path.startsWith('/login') || to.path.startsWith('/register');
-
-  if (isAuthenticated && to.path === '/logout') {
-    console.info('👋 User authenticated, logging out...');
-    await userStore.logout();
-    return navigateTo('/login', { replace: true });
-  }
-  if (!isAuthenticated && !isAuthRoute) {
-    console.info('🔒 User not authenticated, redirecting to login...');
-    return navigateTo('/login', { replace: true });
-  }
-  if (isAuthenticated && isAuthRoute) {
-    console.info('🔓 User authenticated, redirecting to home...');
-    return navigateTo('/', { replace: true });
-  };
-});
+			if (
+				!steamidCookie.value &&
+				to.path !== '/login'
+			) {
+				return navigateTo('/login', {
+					replace: true
+				});
+			}
+		}
+	}
+);

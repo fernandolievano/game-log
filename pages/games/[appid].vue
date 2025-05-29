@@ -31,10 +31,6 @@ import GameHeader from '@/components/game/GameHeader.vue';
 import GameDetails from '@/components/game/GameDetails.vue';
 import { ArrowLeft } from 'lucide-vue-next';
 
-definePageMeta({
-  middleware: ['steam']
-});
-
 const steamStore = useSteamStore();
 const route = useRoute();
 const { appid } = route.params;
