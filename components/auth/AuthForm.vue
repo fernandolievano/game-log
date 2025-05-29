@@ -4,28 +4,26 @@
 
     <!-- OAuth Buttons -->
     <div class="flex flex-col gap-4 items-center justify-center px-2">
-      <OAuthButton provider="google" :should-register="shouldRegister" @click="handleOAuth('google')" />
-      <OAuthButton provider="github" :should-register="shouldRegister" @click="handleOAuth('github')" />
+      <AppButton @click="connectWithSteam" class="uppercase max-w-[400px] mx-auto">
+        <span class="flex items-center justify-center gap-2 text-xs md:text-base">
+          {{ shouldRegister ? 'Sign Un' : 'Sign In' }} with Steam
+          <IconSteam class="w-6" />
+        </span>
+      </AppButton>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import OAuthButton from '@/components/auth/OAuthButton.vue';
-import { useAuth } from '@/composables/useAuth';
+import IconSteam from '@/components/svg/IconSteam.vue';
 
 const props = defineProps<{
   title: string;
   shouldRegister: boolean;
 }>();
 
-const { loginOAuth } = useAuth();
-const handleOAuth = async (provider: 'google' | 'github') => {
-  try {
-    await loginOAuth(provider);
-    navigateTo('/');
-  } catch (err) {
-    console.error(`OAuth login error: ${err}`);
-  }
+const config = useRuntimeConfig();
+const connectWithSteam = () => {
+  window.location.href = `${config.app.domain}/api/auth/steam`;
 };
 </script>

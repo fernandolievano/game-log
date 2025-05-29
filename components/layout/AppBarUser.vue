@@ -25,11 +25,8 @@
 
 <script lang="ts" setup>
 import { LogOut } from 'lucide-vue-next';
-import { useUserStore } from '@/stores/user';
 import { useSteamStore } from '@/stores/steam';
-
-const { logout } = useUserStore();
-const { player } = useSteamStore();
+const { player, logout } = useSteamStore();
 
 const showPlayerWidget = ref<boolean>(false);
 
