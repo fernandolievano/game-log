@@ -4,13 +4,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default defineVitestConfig({
-  test: {
-    environment: 'nuxt',
-    globals: true,
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './'),
-    },
-  },
+	test: {
+		environment: 'nuxt',
+		globals: true,
+		setupFiles: ['./tests/setup.ts']
+	},
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './')
+		}
+	}
 });
