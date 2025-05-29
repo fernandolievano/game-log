@@ -1,6 +1,6 @@
 <template>
   <section class="p-4 flex items-center justify-center">
-    <AuthForm title="Welcome back!" :should-register="false" />
+    <AuthForm title="Welcome Gamer!" :should-register="false" />
   </section>
 </template>
 
