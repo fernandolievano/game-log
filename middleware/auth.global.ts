@@ -1,13 +1,11 @@
 import { useSteamService } from '@/services/steam';
 import { useSteamStore } from '@/stores/steam';
-import { useUserStore } from '@/stores/user';
 
 export default defineNuxtRouteMiddleware(
 	async (to, from) => {
 		const { ssrContext } = useNuxtApp();
 		const steamService = useSteamService();
 		const steamStore = useSteamStore();
-		const userStore = useUserStore();
 		const steamidCookie = useCookie('steamid');
 
 		/**
@@ -17,7 +15,7 @@ export default defineNuxtRouteMiddleware(
 			console.info(
 				'👋 User authenticated, logging out...'
 			);
-			await userStore.logout();
+			await steamStore.logout();
 			return navigateTo('/login', { replace: true });
 		}
 
@@ -68,9 +66,6 @@ export default defineNuxtRouteMiddleware(
 				);
 			}
 		} else {
-			console.info(
-				'🔒 User not authenticated, redirecting to login...'
-			);
 			/**
 			 * Redirect to /login if steamid cookie is not available
 			 */
@@ -79,6 +74,9 @@ export default defineNuxtRouteMiddleware(
 				!steamidCookie.value &&
 				to.path !== '/login'
 			) {
+				console.info(
+					'🔒 User not authenticated, redirecting to login...'
+				);
 				return navigateTo('/login', {
 					replace: true
 				});
