@@ -1,75 +1,52 @@
-# Nuxt Minimal Starter
+# 🎮 Game Log
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+![Nuxt](https://img.shields.io/badge/Nuxt-3-green?logo=nuxtdotjs)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.x-blue?logo=typescript)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.x-38BDF8?logo=tailwindcss)
+![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?logo=vercel)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## Setup
+**Game Log** is a web application built with **Nuxt 3**, **TailwindCSS**, and **TypeScript**, designed to help you visually track the games you've played, are currently playing, or plan to play. It's a clean and responsive tool to manage your personal gaming backlog.
 
-Make sure to install dependencies:
+🟢 **Live demo**:
+👉 [https://game-log-sage.vercel.app](https://game-log-sage.vercel.app)
 
-```bash
-# npm
-npm install
+![screenshot](public/screenshot.png)
 
-# pnpm
-pnpm install
+---
 
-# yarn
-yarn install
+## 🚀 Tech Stack
 
-# bun
-bun install
-```
+- [Nuxt 3](https://nuxt.com/)
+- [Vue 3 + Composition API](https://vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Pinia](https://pinia.vuejs.org/)
+- [Vite](https://vitejs.dev/)
 
-## Development Server
+---
 
-Start the development server on `http://localhost:3000`:
+## ✨ Features
 
-```bash
-# npm
-npm run dev
+- 🎮 Game list with cover art and key information
+- 🔍 Individual game detail page
+- 🌓 Light/Dark mode support
+- 📱 Fully responsive design
+- ⚡ Optimized performance (SSR, lazy loading)
+- 🛠️ Scalable base for authentication and advanced features
 
-# pnpm
-pnpm dev
+---
 
-# yarn
-yarn dev
+## 🚧 Roadmap
 
-# bun
-bun run dev
-```
+- [ ] Quick filters by genre, platform, and status
+- [ ] Persistent favorites
+- [ ] Backend integration
+- [ ] PWA support (offline mode)
 
-## Production
+---
 
-Build the application for production:
+## 📄 License
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+This project is licensed under the MIT License.
+Developed with ❤️ by [Fernando Liévano](https://github.com/fernandolievano)
